@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'base_skeleton.dart';
 
 class DropdownButtonSkeleton extends BaseSkeleton {
-  final double height;
-  final double width;
+  final double? width;
+  final double? height;
 
   const DropdownButtonSkeleton({
     super.key,
     required super.baseColor,
-    required this.height,
-    required this.width,
+    this.width,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-      width: width,
+      width: width ?? 160,
+      height: height ?? 48,
       decoration: BoxDecoration(
         color: baseColor,
         borderRadius: BorderRadius.circular(8),

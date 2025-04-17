@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'base_skeleton.dart';
 
-class SizedBoxSkeleton extends BaseSkeleton {
+class SwitchSkeleton extends BaseSkeleton {
   final double? width;
   final double? height;
 
-  const SizedBoxSkeleton({
+  const SwitchSkeleton({
     super.key,
     required super.baseColor,
     this.width,
@@ -15,11 +15,11 @@ class SizedBoxSkeleton extends BaseSkeleton {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? 100,
-      height: height ?? 10,
+      width: width ?? 40,
+      height: height ?? 24,
       decoration: BoxDecoration(
         color: baseColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
