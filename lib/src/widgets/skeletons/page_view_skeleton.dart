@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'base_skeleton.dart';
-import '../../utils/widget_utils.dart';
 
 class PageViewSkeleton extends BaseSkeleton {
   final int itemCount;

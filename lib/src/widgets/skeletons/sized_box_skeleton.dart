@@ -15,8 +15,8 @@ class SizedBoxSkeleton extends BaseSkeleton {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? 100,
-      height: height ?? 10,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         color: baseColor,
         borderRadius: BorderRadius.circular(8),
