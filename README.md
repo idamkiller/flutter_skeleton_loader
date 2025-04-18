@@ -172,12 +172,55 @@ El paquete soporta automáticamente los siguientes widgets:
 
 ## Personalización
 
-Puedes personalizar el color base de los skeletons:
+El widget `SkeletonLoader` proporciona varias propiedades para personalizar la apariencia y el comportamiento del efecto esqueleto:
+
+### Colores
 
 ```dart
 SkeletonLoader(
   isLoading: isLoading,
+  // Color base del esqueleto
   baseColor: Colors.grey[300],
+  // Color del efecto de brillo que se mueve a través del esqueleto.
+  highlightColor: Colors.white,
+  // Color final del efecto.
+  endColor: Colors.grey[200],
+  child: YourWidget(),
+)
+```
+
+### Duración de la animación
+
+```dart
+SkeletonLoader(
+  isLoading: isLoading,
+  // Duración de la transición entre el esqueleto y el contenido real
+  transitionDuration: Duration(milliseconds: 500),
+  child: YourWidget(),
+)
+```
+
+### Estado de carga
+
+```dart
+SkeletonLoader(
+  // Controla si se muestra el esqueleto o el contenido real
+  isLoading: isLoading,
+  child: YourWidget(),
+)
+```
+
+### Ejemplo completo
+
+Aquí tienes un ejemplo completo que muestra todas las opciones de personalización:
+
+```dart
+SkeletonLoader(
+  isLoading: isLoading,
+  baseColor: Colors.blue[100],
+  highlightColor: Colors.blue[50],
+  endColor: Colors.blue[200],
+  transitionDuration: Duration(milliseconds: 800),
   child: YourWidget(),
 )
 ```
