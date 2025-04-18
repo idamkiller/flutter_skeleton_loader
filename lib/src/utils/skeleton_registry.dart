@@ -26,6 +26,7 @@ class SkeletonRegistry {
           baseColor: baseColor,
           width: (widget as SizedBox).width ?? 100,
           height: widget.height ?? 10,
+          isEmpty: widget.child == null,
         ),
     Card:
         (widget, baseColor) => CardSkeleton(
@@ -261,7 +262,6 @@ class SkeletonRegistry {
     if (widget is Row) {
       return Row(
         key: widget.key,
-        spacing: widget.spacing,
         mainAxisSize: widget.mainAxisSize,
         mainAxisAlignment: widget.mainAxisAlignment,
         crossAxisAlignment: widget.crossAxisAlignment,
@@ -273,7 +273,6 @@ class SkeletonRegistry {
     } else if (widget is Column) {
       return Column(
         key: widget.key,
-        spacing: widget.spacing,
         mainAxisSize: widget.mainAxisSize,
         mainAxisAlignment: widget.mainAxisAlignment,
         crossAxisAlignment: widget.crossAxisAlignment,
@@ -285,7 +284,6 @@ class SkeletonRegistry {
     } else if (widget is Wrap) {
       return Wrap(
         key: widget.key,
-        spacing: widget.spacing,
         runSpacing: widget.runSpacing,
         alignment: widget.alignment,
         crossAxisAlignment: widget.crossAxisAlignment,
