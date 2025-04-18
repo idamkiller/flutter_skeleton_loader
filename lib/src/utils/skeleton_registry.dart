@@ -105,18 +105,9 @@ class SkeletonRegistry {
     Radio<Enum>:
         (widget, baseColor) =>
             RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<dynamic>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
     Radio<void>:
         (widget, baseColor) =>
             RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    DropdownButton:
-        (widget, baseColor) => DropdownButtonSkeleton(
-          baseColor: baseColor,
-          height: 48,
-          width: 160,
-        ),
     DropdownButton<int>:
         (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
@@ -147,31 +138,7 @@ class SkeletonRegistry {
           height: 48,
           width: 160,
         ),
-    DropdownButton<DateTime>:
-        (widget, baseColor) => DropdownButtonSkeleton(
-          baseColor: baseColor,
-          height: 48,
-          width: 160,
-        ),
     DropdownButton<Duration>:
-        (widget, baseColor) => DropdownButtonSkeleton(
-          baseColor: baseColor,
-          height: 48,
-          width: 160,
-        ),
-    DropdownButton<Enum>:
-        (widget, baseColor) => DropdownButtonSkeleton(
-          baseColor: baseColor,
-          height: 48,
-          width: 160,
-        ),
-    DropdownButton<void>:
-        (widget, baseColor) => DropdownButtonSkeleton(
-          baseColor: baseColor,
-          height: 48,
-          width: 160,
-        ),
-    PopupMenuButton:
         (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
@@ -214,12 +181,6 @@ class SkeletonRegistry {
           width: 160,
         ),
     PopupMenuButton<Duration>:
-        (widget, baseColor) => DropdownButtonSkeleton(
-          baseColor: baseColor,
-          height: 48,
-          width: 160,
-        ),
-    PopupMenuButton<Enum>:
         (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
