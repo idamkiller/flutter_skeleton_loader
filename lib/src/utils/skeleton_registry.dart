@@ -223,7 +223,6 @@ class SkeletonRegistry {
 
     if (widget is Row) {
       return Row(
-        key: widget.key,
         mainAxisSize: widget.mainAxisSize,
         mainAxisAlignment: widget.mainAxisAlignment,
         crossAxisAlignment: widget.crossAxisAlignment,
@@ -234,7 +233,6 @@ class SkeletonRegistry {
       );
     } else if (widget is Column) {
       return Column(
-        key: widget.key,
         mainAxisSize: widget.mainAxisSize,
         mainAxisAlignment: widget.mainAxisAlignment,
         crossAxisAlignment: widget.crossAxisAlignment,
@@ -245,7 +243,6 @@ class SkeletonRegistry {
       );
     } else if (widget is Wrap) {
       return Wrap(
-        key: widget.key,
         runSpacing: widget.runSpacing,
         alignment: widget.alignment,
         crossAxisAlignment: widget.crossAxisAlignment,
@@ -256,7 +253,6 @@ class SkeletonRegistry {
     }
     final Flex flexWidget = widget as Flex;
     return Flex(
-      key: flexWidget.key,
       direction: flexWidget.direction,
       mainAxisSize: flexWidget.mainAxisSize,
       mainAxisAlignment: flexWidget.mainAxisAlignment,
