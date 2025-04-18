@@ -13,7 +13,7 @@ void main() {
       final container = tester.widget<Container>(find.byType(Container));
 
       final constraints = container.constraints;
-      expect(constraints?.maxHeight, 20); // height por defecto
+      expect(constraints?.maxHeight, 20);
 
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);

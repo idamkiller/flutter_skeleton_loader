@@ -4,7 +4,7 @@ import 'package:flutter_skeleton_loader/src/widgets/skeletons/text_field_skeleto
 
 void main() {
   group('TextFieldSkeleton', () {
-    testWidgets('debería renderizar con las dimensiones por defecto', (
+    testWidgets('debería renderizar con dimensiones por defecto', (
       tester,
     ) async {
       const baseColor = Colors.grey;
@@ -15,17 +15,12 @@ void main() {
       );
 
       final container = tester.widget<Container>(find.byType(Container));
-
       final constraints = container.constraints;
-      expect(constraints?.maxWidth, double.infinity); // width es opcional
-      expect(constraints?.maxHeight, 48); // altura por defecto
-
+      expect(constraints?.maxWidth, double.infinity);
+      expect(constraints?.maxHeight, 48);
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);
-      expect(
-        decoration.borderRadius,
-        BorderRadius.circular(8),
-      ); // borderRadius por defecto
+      expect(decoration.borderRadius, BorderRadius.circular(8));
     });
 
     testWidgets('debería renderizar con dimensiones personalizadas', (
@@ -68,7 +63,6 @@ void main() {
       );
 
       final container = tester.widget<Container>(find.byType(Container));
-
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);
     });

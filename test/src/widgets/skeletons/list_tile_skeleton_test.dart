@@ -14,7 +14,6 @@ void main() {
         ),
       );
 
-      // Verificar el contenedor principal
       final mainContainer = tester.widget<Container>(
         find.ancestor(of: find.byType(Row), matching: find.byType(Container)),
       );
@@ -24,7 +23,6 @@ void main() {
         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       );
 
-      // Verificar el elemento leading (círculo)
       final leadingContainer = tester.widget<Container>(
         find.byKey(const Key('list_tile_skeleton_leading')),
       );
@@ -34,7 +32,6 @@ void main() {
       expect(leadingDecoration.color, baseColor);
       expect(leadingDecoration.shape, BoxShape.circle);
 
-      // Verificar el título
       final titleContainer = tester.widget<Container>(
         find.byKey(const Key('list_tile_skeleton_title')),
       );
@@ -44,7 +41,6 @@ void main() {
       expect(titleDecoration.color, baseColor);
       expect(titleDecoration.borderRadius, BorderRadius.circular(4));
 
-      // Verificar el subtítulo
       final subtitleContainer = tester.widget<Container>(
         find.byKey(const Key('list_tile_skeleton_subtitle')),
       );
@@ -54,7 +50,6 @@ void main() {
       expect(subtitleDecoration.color, baseColor);
       expect(subtitleDecoration.borderRadius, BorderRadius.circular(4));
 
-      // Verificar el elemento trailing
       final trailingContainer = tester.widget<Container>(
         find.byKey(const Key('list_tile_skeleton_trailing')),
       );
@@ -77,11 +72,7 @@ void main() {
           ),
         );
 
-        // Verificar que no hay elemento leading
-        expect(
-          find.byType(Container).evaluate().length,
-          4,
-        ); // Solo el contenedor principal, título, subtítulo y trailing
+        expect(find.byType(Container).evaluate().length, 4);
       },
     );
 
@@ -97,11 +88,7 @@ void main() {
           ),
         );
 
-        // Verificar que no hay elemento trailing
-        expect(
-          find.byType(Container).evaluate().length,
-          4,
-        ); // Solo el contenedor principal, leading, título y subtítulo
+        expect(find.byType(Container).evaluate().length, 4);
       },
     );
 

@@ -17,7 +17,6 @@ void main() {
         ),
       );
 
-      // Verificar que hay 3 contenedores (uno por página)
       final containers = tester.widgetList<Container>(
         find.descendant(
           of: find.byType(PageView),
@@ -25,7 +24,6 @@ void main() {
         ),
       );
 
-      // Verificar las propiedades de cada contenedor
       for (final container in containers) {
         expect(container.margin, const EdgeInsets.all(16));
 

@@ -4,7 +4,7 @@ import 'package:flutter_skeleton_loader/src/widgets/skeletons/switch_skeleton.da
 
 void main() {
   group('SwitchSkeleton', () {
-    testWidgets('debería renderizar con las dimensiones por defecto', (
+    testWidgets('debería renderizar con dimensiones por defecto', (
       tester,
     ) async {
       const baseColor = Colors.grey;
@@ -13,11 +13,9 @@ void main() {
       );
 
       final container = tester.widget<Container>(find.byType(Container));
-
       final constraints = container.constraints;
-      expect(constraints?.maxWidth, 40); // width por defecto
-      expect(constraints?.maxHeight, 24); // height por defecto
-
+      expect(constraints?.maxWidth, 40);
+      expect(constraints?.maxHeight, 24);
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);
       expect(decoration.borderRadius, BorderRadius.circular(12));
@@ -59,7 +57,6 @@ void main() {
       );
 
       final container = tester.widget<Container>(find.byType(Container));
-
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);
     });

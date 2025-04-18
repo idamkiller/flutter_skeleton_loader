@@ -17,7 +17,6 @@ void main() {
         ),
       );
 
-      // Verificar que hay 3 contenedores (uno por elemento)
       final containers = tester.widgetList<Container>(
         find.descendant(
           of: find.byType(ListView),
@@ -26,7 +25,6 @@ void main() {
       );
       expect(containers.length, itemCount);
 
-      // Verificar las propiedades de cada contenedor
       for (final container in containers) {
         final constraints = container.constraints;
         expect(constraints?.maxHeight, 72);

@@ -4,7 +4,7 @@ import 'package:flutter_skeleton_loader/src/widgets/skeletons/radio_skeleton.dar
 
 void main() {
   group('RadioSkeleton', () {
-    testWidgets('debería renderizar con las dimensiones por defecto', (
+    testWidgets('debería renderizar con dimensiones por defecto', (
       tester,
     ) async {
       const baseColor = Colors.grey;
@@ -13,11 +13,9 @@ void main() {
       );
 
       final container = tester.widget<Container>(find.byType(Container));
-
       final constraints = container.constraints;
-      expect(constraints?.maxWidth, 20); // width por defecto
-      expect(constraints?.maxHeight, 20); // height por defecto
-
+      expect(constraints?.maxWidth, 20);
+      expect(constraints?.maxHeight, 20);
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);
       expect(decoration.shape, BoxShape.circle);
@@ -59,7 +57,6 @@ void main() {
       );
 
       final container = tester.widget<Container>(find.byType(Container));
-
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, baseColor);
     });

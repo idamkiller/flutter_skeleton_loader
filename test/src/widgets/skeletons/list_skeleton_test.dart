@@ -68,7 +68,6 @@ void main() {
         ),
       );
 
-      // Buscar los contenedores dentro del ListSkeleton
       final containers = tester.widgetList<Container>(
         find.descendant(
           of: find.byType(ListSkeleton),
@@ -90,7 +89,6 @@ void main() {
         );
       }
 
-      // Buscar los paddings dentro del ListSkeleton
       final List<Padding> paddings = [];
 
       for (var i = 0; i < itemCount; i++) {
@@ -118,7 +116,6 @@ void main() {
         MaterialApp(home: Scaffold(body: ListSkeleton(baseColor: baseColor))),
       );
 
-      // Buscar los contenedores dentro del ListSkeleton
       final containers = tester.widgetList<Container>(
         find.descendant(
           of: find.byType(ListSkeleton),

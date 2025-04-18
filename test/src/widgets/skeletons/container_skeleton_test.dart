@@ -16,7 +16,6 @@ void main() {
 
       final container = tester.widget<Container>(find.byType(Container));
 
-      // Verificar que el contenedor no tiene dimensiones fijas por defecto
       final constraints = container.constraints;
       expect(constraints?.maxWidth, null);
       expect(constraints?.maxHeight, null);

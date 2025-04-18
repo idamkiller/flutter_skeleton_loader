@@ -40,7 +40,7 @@ void main() {
       final container = tester.widget<Container>(find.byType(Container));
 
       final constraints = container.constraints;
-      expect(constraints?.maxWidth, 100.0); // 10 caracteres por defecto * 10.0
+      expect(constraints?.maxWidth, 100.0);
       expect(constraints?.maxHeight, 20);
     });
 

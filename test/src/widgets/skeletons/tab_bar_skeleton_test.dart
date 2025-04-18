@@ -12,7 +12,6 @@ void main() {
         MaterialApp(home: Scaffold(body: TabBarSkeleton(baseColor: baseColor))),
       );
 
-      // Verificar que hay 3 tabs por defecto
       final containers = tester.widgetList<Container>(
         find.descendant(
           of: find.byType(TabBarSkeleton),
@@ -21,18 +20,16 @@ void main() {
       );
       expect(containers.length, 3);
 
-      // Verificar las propiedades de cada tab
       for (final container in containers) {
         final constraints = container.constraints;
-        expect(constraints?.maxWidth, 80); // tabWidth por defecto
-        expect(constraints?.maxHeight, 48); // height por defecto
+        expect(constraints?.maxWidth, 80);
+        expect(constraints?.maxHeight, 48);
 
         final decoration = container.decoration as BoxDecoration;
         expect(decoration.color, baseColor);
         expect(decoration.borderRadius, BorderRadius.circular(8));
       }
 
-      // Verificar que el SizedBox contenedor tiene la altura correcta
       final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
       expect(sizedBox.height, 48);
     });
@@ -57,7 +54,6 @@ void main() {
         ),
       );
 
-      // Verificar que hay el número correcto de tabs
       final containers = tester.widgetList<Container>(
         find.descendant(
           of: find.byType(TabBarSkeleton),
@@ -66,7 +62,6 @@ void main() {
       );
       expect(containers.length, tabCount);
 
-      // Verificar las propiedades de cada tab
       for (final container in containers) {
         final constraints = container.constraints;
         expect(constraints?.maxWidth, tabWidth);
@@ -77,7 +72,6 @@ void main() {
         expect(decoration.borderRadius, BorderRadius.circular(8));
       }
 
-      // Verificar que el SizedBox contenedor tiene la altura correcta
       final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
       expect(sizedBox.height, height);
     });
