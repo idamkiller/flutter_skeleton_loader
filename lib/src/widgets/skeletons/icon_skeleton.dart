@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'base_skeleton.dart';
 
 class IconSkeleton extends BaseSkeleton {
-  final double? size;
+  final double size;
 
-  const IconSkeleton({super.key, required super.baseColor, this.size});
+  const IconSkeleton({super.key, required super.baseColor, required this.size});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size ?? 24,
-      height: size ?? 24,
+      width: size,
+      height: size,
       decoration: BoxDecoration(color: baseColor, shape: BoxShape.circle),
     );
   }
