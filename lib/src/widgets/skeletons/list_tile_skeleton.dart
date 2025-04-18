@@ -21,6 +21,7 @@ class ListTileSkeleton extends BaseSkeleton {
         children: [
           if (showLeading)
             Container(
+              key: const Key('list_tile_skeleton_leading'),
               width: 40,
               height: 40,
               decoration: BoxDecoration(
@@ -35,6 +36,7 @@ class ListTileSkeleton extends BaseSkeleton {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
+                  key: const Key('list_tile_skeleton_title'),
                   width: 200,
                   height: 16,
                   decoration: BoxDecoration(
@@ -44,6 +46,7 @@ class ListTileSkeleton extends BaseSkeleton {
                 ),
                 const SizedBox(height: 8),
                 Container(
+                  key: const Key('list_tile_skeleton_subtitle'),
                   width: 150,
                   height: 14,
                   decoration: BoxDecoration(
@@ -56,6 +59,7 @@ class ListTileSkeleton extends BaseSkeleton {
           ),
           if (showTrailing)
             Container(
+              key: const Key('list_tile_skeleton_trailing'),
               width: 24,
               height: 24,
               decoration: BoxDecoration(
