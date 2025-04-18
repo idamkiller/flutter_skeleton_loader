@@ -127,7 +127,7 @@ void main() {
       });
 
       test('debería retornar 5 para un widget no soportado', () {
-        final widget = Container(child: Text('No soportado'));
+        final widget = Text('No soportado');
 
         expect(WidgetUtils.getItemCount(widget), 5);
       });
