@@ -253,21 +253,19 @@ class SkeletonRegistry {
         verticalDirection: widget.verticalDirection,
         children: children,
       );
-    } else if (widget is Flex) {
-      return Flex(
-        key: widget.key,
-        direction: widget.direction,
-        mainAxisSize: widget.mainAxisSize,
-        mainAxisAlignment: widget.mainAxisAlignment,
-        crossAxisAlignment: widget.crossAxisAlignment,
-        textDirection: widget.textDirection,
-        verticalDirection: widget.verticalDirection,
-        textBaseline: widget.textBaseline,
-        children: children,
-      );
     }
-
-    return _buildDefaultSkeleton(baseColor);
+    final Flex flexWidget = widget as Flex;
+    return Flex(
+      key: flexWidget.key,
+      direction: flexWidget.direction,
+      mainAxisSize: flexWidget.mainAxisSize,
+      mainAxisAlignment: flexWidget.mainAxisAlignment,
+      crossAxisAlignment: flexWidget.crossAxisAlignment,
+      textDirection: flexWidget.textDirection,
+      verticalDirection: flexWidget.verticalDirection,
+      textBaseline: flexWidget.textBaseline,
+      children: children,
+    );
   }
 
   static Widget _buildDefaultSkeleton(Color baseColor) {
