@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_skeleton_loader/src/utils/skeleton_registry.dart';
 import 'package:flutter_skeleton_loader/src/widgets/skeletons/skeletons.dart';
 
+enum MyEnum { value1, value2 }
+
 void main() {
   group('SkeletonRegistry', () {
     const baseColor = Colors.grey;
@@ -152,7 +154,7 @@ void main() {
       expect((skeleton as CheckboxSkeleton).baseColor, baseColor);
     });
 
-    testWidgets('debería construir RadioSkeleton para un Radio', (
+    testWidgets('debería construir RadioSkeleton para un Radio<int>', (
       tester,
     ) async {
       final widget = Radio<int>(value: 1, groupValue: 1, onChanged: (value) {});
@@ -162,8 +164,115 @@ void main() {
       expect((skeleton as RadioSkeleton).baseColor, baseColor);
     });
 
+    testWidgets('debería construir RadioSkeleton para un Radio<String>', (
+      tester,
+    ) async {
+      final widget = Radio<String>(
+        value: '1',
+        groupValue: '1',
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+
+    testWidgets('debería construir RadioSkeleton para un Radio<bool>', (
+      tester,
+    ) async {
+      final widget = Radio<bool>(
+        value: true,
+        groupValue: true,
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+    testWidgets('debería construir RadioSkeleton para un Radio<double>', (
+      tester,
+    ) async {
+      final widget = Radio<double>(
+        value: 1.0,
+        groupValue: 1.0,
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+    testWidgets('debería construir RadioSkeleton para un Radio<Color>', (
+      tester,
+    ) async {
+      final widget = Radio<Color>(
+        value: Colors.red,
+        groupValue: Colors.red,
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+
+    testWidgets('debería construir RadioSkeleton para un Radio<DateTime>', (
+      tester,
+    ) async {
+      final widget = Radio<DateTime>(
+        value: DateTime.now(),
+        groupValue: DateTime.now(),
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+    testWidgets('debería construir RadioSkeleton para un Radio<Duration>', (
+      tester,
+    ) async {
+      final widget = Radio<Duration>(
+        value: Duration(seconds: 1),
+        groupValue: Duration(seconds: 1),
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+    testWidgets('debería construir RadioSkeleton para un Radio<Enum>', (
+      tester,
+    ) async {
+      final widget = Radio<Enum>(
+        value: MyEnum.value1,
+        groupValue: MyEnum.value1,
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+    testWidgets('debería construir RadioSkeleton para un Radio<void>', (
+      tester,
+    ) async {
+      final widget = Radio<void>(
+        value: null,
+        groupValue: null,
+        onChanged: (value) {},
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<RadioSkeleton>());
+      expect((skeleton as RadioSkeleton).baseColor, baseColor);
+    });
+
     testWidgets(
-      'debería construir DropdownButtonSkeleton para un DropdownButton',
+      'debería construir DropdownButtonSkeleton para un DropdownButton<String>',
       (tester) async {
         final widget = DropdownButton<String>(
           value: '1',
@@ -179,15 +288,233 @@ void main() {
         expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
       },
     );
-
     testWidgets(
-      'debería construir DropdownButtonSkeleton para un PopupMenuButton',
+      'debería construir DropdownButtonSkeleton para un DropdownButton<int>',
+      (tester) async {
+        final widget = DropdownButton<int>(
+          value: 1,
+          items: [
+            DropdownMenuItem(value: 1, child: Text('Item 1')),
+            DropdownMenuItem(value: 2, child: Text('Item 2')),
+          ],
+          onChanged: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un DropdownButton<bool>',
+      (tester) async {
+        final widget = DropdownButton<bool>(
+          value: true,
+          items: [
+            DropdownMenuItem(value: true, child: Text('Item 1')),
+            DropdownMenuItem(value: false, child: Text('Item 2')),
+          ],
+          onChanged: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un DropdownButton<double>',
+      (tester) async {
+        final widget = DropdownButton<double>(
+          value: 1.0,
+          items: [
+            DropdownMenuItem(value: 1.0, child: Text('Item 1')),
+            DropdownMenuItem(value: 2.0, child: Text('Item 2')),
+          ],
+          onChanged: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un DropdownButton<Color>',
+      (tester) async {
+        final widget = DropdownButton<Color>(
+          value: Colors.red,
+          items: [
+            DropdownMenuItem(value: Colors.red, child: Text('Item 1')),
+            DropdownMenuItem(value: Colors.blue, child: Text('Item 2')),
+          ],
+          onChanged: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un DropdownButton<Duration>',
+      (tester) async {
+        final widget = DropdownButton<Duration>(
+          value: Duration(seconds: 1),
+          items: [
+            DropdownMenuItem(
+              value: Duration(seconds: 1),
+              child: Text('Item 1'),
+            ),
+            DropdownMenuItem(
+              value: Duration(seconds: 2),
+              child: Text('Item 2'),
+            ),
+          ],
+          onChanged: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<String>',
       (tester) async {
         final widget = PopupMenuButton<String>(
           itemBuilder:
               (context) => [
                 PopupMenuItem(value: '1', child: Text('Item 1')),
                 PopupMenuItem(value: '2', child: Text('Item 2')),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<int>',
+      (tester) async {
+        final widget = PopupMenuButton<int>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(value: 1, child: Text('Item 1')),
+                PopupMenuItem(value: 2, child: Text('Item 2')),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<bool>',
+      (tester) async {
+        final widget = PopupMenuButton<bool>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(value: true, child: Text('Item 1')),
+                PopupMenuItem(value: false, child: Text('Item 2')),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<double>',
+      (tester) async {
+        final widget = PopupMenuButton<double>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(value: 1.0, child: Text('Item 1')),
+                PopupMenuItem(value: 2.0, child: Text('Item 2')),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<Color>',
+      (tester) async {
+        final widget = PopupMenuButton<Color>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(value: Colors.red, child: Text('Item 1')),
+                PopupMenuItem(value: Colors.blue, child: Text('Item 2')),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<DateTime>',
+      (tester) async {
+        final widget = PopupMenuButton<DateTime>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(value: DateTime.now(), child: Text('Item 1')),
+                PopupMenuItem(
+                  value: DateTime.now().add(Duration(days: 1)),
+                  child: Text('Item 2'),
+                ),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<Duration>',
+      (tester) async {
+        final widget = PopupMenuButton<Duration>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: Duration(seconds: 1),
+                  child: Text('Item 1'),
+                ),
+                PopupMenuItem(
+                  value: Duration(seconds: 2),
+                  child: Text('Item 2'),
+                ),
+              ],
+          onSelected: (value) {},
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DropdownButtonSkeleton>());
+        expect((skeleton as DropdownButtonSkeleton).baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DropdownButtonSkeleton para un PopupMenuButton<void>',
+      (tester) async {
+        final widget = PopupMenuButton<void>(
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(value: null, child: Text('Item 1')),
+                PopupMenuItem(value: null, child: Text('Item 2')),
               ],
           onSelected: (value) {},
         );
@@ -220,7 +547,7 @@ void main() {
     );
 
     testWidgets(
-      'debería construir skeletons para widgets con múltiples hijos',
+      'debería construir skeletons para widgets con múltiples hijos tipo Row',
       (tester) async {
         final widget = Row(children: [Text('Texto 1'), Text('Texto 2')]);
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -232,6 +559,48 @@ void main() {
         expect(row.children[1], isA<TextSkeleton>());
       },
     );
+    testWidgets(
+      'debería construir skeletons para widgets con múltiples hijos tipo Column',
+      (tester) async {
+        final widget = Column(children: [Text('Texto 1'), Text('Texto 2')]);
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<Column>());
+        final column = skeleton as Column;
+        expect(column.children.length, 2);
+        expect(column.children[0], isA<TextSkeleton>());
+        expect(column.children[1], isA<TextSkeleton>());
+      },
+    );
+    testWidgets(
+      'debería construir skeletons para widgets con múltiples hijos tipo Wrap',
+      (tester) async {
+        final widget = Wrap(children: [Text('Texto 1'), Text('Texto 2')]);
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<Wrap>());
+        final wrap = skeleton as Wrap;
+        expect(wrap.children.length, 2);
+        expect(wrap.children[0], isA<TextSkeleton>());
+        expect(wrap.children[1], isA<TextSkeleton>());
+      },
+    );
+    testWidgets(
+      'debería construir skeletons para widgets con múltiples hijos tipo Flex',
+      (tester) async {
+        final widget = Flex(
+          direction: Axis.horizontal,
+          children: [Text('Texto 1'), Text('Texto 2')],
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<Flex>());
+        final flex = skeleton as Flex;
+        expect(flex.children.length, 2);
+        expect(flex.children[0], isA<TextSkeleton>());
+        expect(flex.children[1], isA<TextSkeleton>());
+      },
+    );
 
     testWidgets('debería construir skeleton para un Form', (tester) async {
       final widget = Form(child: TextField());
@@ -239,6 +608,18 @@ void main() {
 
       expect(skeleton, isA<TextFieldSkeleton>());
       expect((skeleton as TextFieldSkeleton).baseColor, baseColor);
+    });
+
+    testWidgets('debería construir skeleton para un CircleAvatar', (
+      tester,
+    ) async {
+      final widget = CircleAvatar(
+        backgroundImage: NetworkImage('https://example.com/image.jpg'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<CircleAvatarSkeleton>());
+      expect((skeleton as CircleAvatarSkeleton).baseColor, baseColor);
     });
   });
 }
