@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skeleton_loader/src/utils/widget_utils.dart';
+import 'package:flutter_skeleton_loader/src/widgets/skeletons/default_skeleton.dart';
 import '../widgets/skeletons/skeletons.dart';
 
 typedef SkeletonBuilder = Widget Function(Widget widget, Color baseColor);
@@ -12,8 +13,8 @@ class SkeletonRegistry {
     Image:
         (widget, baseColor) => ImageSkeleton(
           baseColor: baseColor,
-          width: (widget as Image).width,
-          height: widget.height,
+          width: (widget as Image).width ?? 100,
+          height: widget.height ?? 100,
         ),
     Container:
         (widget, baseColor) => ContainerSkeleton(
@@ -309,13 +310,6 @@ class SkeletonRegistry {
   }
 
   static Widget _buildDefaultSkeleton(Color baseColor) {
-    return Container(
-      width: 100,
-      height: 40,
-      decoration: BoxDecoration(
-        color: baseColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-    );
+    return DefaultSkeleton(baseColor: baseColor, width: 100, height: 40);
   }
 }
