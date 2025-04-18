@@ -2,6 +2,8 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_skeleton_loader.svg)](https://pub.dev/packages/flutter_skeleton_loader)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/idam/flutter_skeleton_loader/actions/workflows/tests.yml/badge.svg)](https://github.com/idam/flutter_skeleton_loader/actions/workflows/tests.yml)
+
 
 Una biblioteca Flutter para crear efectos de carga (skeletons) elegantes y personalizables para tus aplicaciones. Proporciona una forma sencilla de mostrar placeholders mientras se cargan los datos reales.
 

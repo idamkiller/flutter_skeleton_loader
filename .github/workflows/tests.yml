@@ -1,0 +1,92 @@
+name: tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Flutter Tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          cache: true
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool/
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project source
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+
+      - name: Install lcov
+        run: sudo apt-get install lcov
+
+      - name: Check coverage threshold
+        run: |
+          lcov --summary coverage/lcov.info | grep "lines......:" | awk '{print $2}' | sed 's/%//' > coverage_percentage.txt
+          coverage=$(cat coverage_percentage.txt)
+          echo "Coverage: $coverage%"
+          threshold=${{ vars.COVERAGE_THRESHOLD }}
+          echo "Coverage threshold: $threshold%"
+          if (( $(echo "$coverage < $threshold" | bc -l) )); then
+            echo "Test coverage is below $threshold%. Failing the job."
+            exit 1
+          fi      
+
+      - name: send telegram message on error
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+              ${{ github.actor }} created commit:
+              Commit message: ${{ github.event.commits[0].message }}
+              See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+              Status: ${{ job.status }}
+              See Workflow: ${{ github.run_id }}
+
+      - name: send telegram message on push
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+            See run: ${{ github.run_id }}
+            See lcov: https://codecov.io/gh/${{ github.repository }}/commit/${{ github.sha }}
+            Status: ${{ job.status }}
+            See Workflow: ${{ github.run_id }}
