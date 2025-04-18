@@ -8,7 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,19 +18,20 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, this.delay = const Duration(seconds: 1)});
+  final Duration delay;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _isLoading = true;
+  bool isLoading = true;
 
   Future<void> _removeSkeleton() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(widget.delay);
     setState(() {
-      _isLoading = false;
+      isLoading = false;
     });
   }
 
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Center(
         child: SkeletonLoader(
-          isLoading: _isLoading,
+          isLoading: isLoading,
           child: Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
@@ -119,12 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 max: 1,
               ),
               DropdownButton(
+                key: const Key('dropdown_example'),
                 items: [
-                  DropdownMenuItem(
-                    key: const Key('dropdown_example'),
-                    value: 1,
-                    child: Text('Option 1'),
-                  ),
+                  DropdownMenuItem(value: 1, child: Text('Option 1')),
                   DropdownMenuItem(value: 2, child: Text('Option 2')),
                 ],
                 onChanged: (value) {},
