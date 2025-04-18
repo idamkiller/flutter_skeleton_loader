@@ -383,11 +383,10 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<String>',
       (tester) async {
         final widget = PopupMenuButton<String>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: '1', child: Text('Item 1')),
-                PopupMenuItem(value: '2', child: Text('Item 2')),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: '1', child: Text('Item 1')),
+            PopupMenuItem(value: '2', child: Text('Item 2')),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -400,11 +399,10 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<int>',
       (tester) async {
         final widget = PopupMenuButton<int>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: 1, child: Text('Item 1')),
-                PopupMenuItem(value: 2, child: Text('Item 2')),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: 1, child: Text('Item 1')),
+            PopupMenuItem(value: 2, child: Text('Item 2')),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -417,11 +415,10 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<bool>',
       (tester) async {
         final widget = PopupMenuButton<bool>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: true, child: Text('Item 1')),
-                PopupMenuItem(value: false, child: Text('Item 2')),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: true, child: Text('Item 1')),
+            PopupMenuItem(value: false, child: Text('Item 2')),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -434,11 +431,10 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<double>',
       (tester) async {
         final widget = PopupMenuButton<double>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: 1.0, child: Text('Item 1')),
-                PopupMenuItem(value: 2.0, child: Text('Item 2')),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: 1.0, child: Text('Item 1')),
+            PopupMenuItem(value: 2.0, child: Text('Item 2')),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -451,11 +447,10 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<Color>',
       (tester) async {
         final widget = PopupMenuButton<Color>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: Colors.red, child: Text('Item 1')),
-                PopupMenuItem(value: Colors.blue, child: Text('Item 2')),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: Colors.red, child: Text('Item 1')),
+            PopupMenuItem(value: Colors.blue, child: Text('Item 2')),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -468,14 +463,13 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<DateTime>',
       (tester) async {
         final widget = PopupMenuButton<DateTime>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: DateTime.now(), child: Text('Item 1')),
-                PopupMenuItem(
-                  value: DateTime.now().add(Duration(days: 1)),
-                  child: Text('Item 2'),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: DateTime.now(), child: Text('Item 1')),
+            PopupMenuItem(
+              value: DateTime.now().add(Duration(days: 1)),
+              child: Text('Item 2'),
+            ),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -488,17 +482,16 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<Duration>',
       (tester) async {
         final widget = PopupMenuButton<Duration>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: Duration(seconds: 1),
-                  child: Text('Item 1'),
-                ),
-                PopupMenuItem(
-                  value: Duration(seconds: 2),
-                  child: Text('Item 2'),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: Duration(seconds: 1),
+              child: Text('Item 1'),
+            ),
+            PopupMenuItem(
+              value: Duration(seconds: 2),
+              child: Text('Item 2'),
+            ),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
@@ -511,11 +504,10 @@ void main() {
       'debería construir DropdownButtonSkeleton para un PopupMenuButton<void>',
       (tester) async {
         final widget = PopupMenuButton<void>(
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(value: null, child: Text('Item 1')),
-                PopupMenuItem(value: null, child: Text('Item 2')),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(value: null, child: Text('Item 1')),
+            PopupMenuItem(value: null, child: Text('Item 2')),
+          ],
           onSelected: (value) {},
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);

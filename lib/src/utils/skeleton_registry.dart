@@ -7,193 +7,155 @@ typedef SkeletonBuilder = Widget Function(Widget widget, Color baseColor);
 
 class SkeletonRegistry {
   static final Map<Type, SkeletonBuilder> _registry = {
-    Text:
-        (widget, baseColor) =>
-            TextSkeleton(baseColor: baseColor, text: (widget as Text).data),
-    Image:
-        (widget, baseColor) => ImageSkeleton(
+    Text: (widget, baseColor) =>
+        TextSkeleton(baseColor: baseColor, text: (widget as Text).data),
+    Image: (widget, baseColor) => ImageSkeleton(
           baseColor: baseColor,
           width: (widget as Image).width ?? 100,
           height: widget.height ?? 100,
         ),
-    Container:
-        (widget, baseColor) => ContainerSkeleton(
+    Container: (widget, baseColor) => ContainerSkeleton(
           baseColor: baseColor,
           width: (widget as Container).constraints?.maxWidth,
           height: widget.constraints?.maxHeight,
         ),
-    SizedBox:
-        (widget, baseColor) => SizedBoxSkeleton(
+    SizedBox: (widget, baseColor) => SizedBoxSkeleton(
           baseColor: baseColor,
           width: (widget as SizedBox).width ?? 100,
           height: widget.height ?? 10,
           isEmpty: widget.child == null,
         ),
-    Card:
-        (widget, baseColor) => CardSkeleton(
+    Card: (widget, baseColor) => CardSkeleton(
           baseColor: baseColor,
           width: (widget as Card).child != null ? 100 : 0,
           height: widget.child != null ? 100 : 0,
         ),
-    IconButton:
-        (widget, baseColor) => IconButtonSkeleton(
+    IconButton: (widget, baseColor) => IconButtonSkeleton(
           baseColor: baseColor,
           width: (widget as IconButton).iconSize ?? 24,
           height: widget.iconSize ?? 24,
         ),
-    Icon:
-        (widget, baseColor) => IconSkeleton(
+    Icon: (widget, baseColor) => IconSkeleton(
           baseColor: baseColor,
           size: (widget as Icon).size ?? 24,
         ),
-    CircleAvatar:
-        (widget, baseColor) => CircleAvatarSkeleton(
+    CircleAvatar: (widget, baseColor) => CircleAvatarSkeleton(
           baseColor: baseColor,
           radius:
               (widget as CircleAvatar).radius != null ? widget.radius! * 2 : 40,
         ),
-    ListTile:
-        (widget, baseColor) => ListTileSkeleton(
+    ListTile: (widget, baseColor) => ListTileSkeleton(
           baseColor: baseColor,
           showLeading: (widget as ListTile).leading != null,
           showTrailing: widget.trailing != null,
         ),
-    ListView:
-        (widget, baseColor) => ListViewSkeleton(
+    ListView: (widget, baseColor) => ListViewSkeleton(
           baseColor: baseColor,
           scrollDirection: (widget as ListView).scrollDirection,
           itemCount: WidgetUtils.getItemCount(widget),
         ),
-    PageView:
-        (widget, baseColor) => PageViewSkeleton(
+    PageView: (widget, baseColor) => PageViewSkeleton(
           baseColor: baseColor,
           itemCount: WidgetUtils.getItemCount(widget),
         ),
-    TextField:
-        (widget, baseColor) =>
-            TextFieldSkeleton(baseColor: baseColor, height: 48),
-    TextFormField:
-        (widget, baseColor) =>
-            TextFieldSkeleton(baseColor: baseColor, height: 48),
-    Checkbox:
-        (widget, baseColor) =>
-            CheckboxSkeleton(baseColor: baseColor, width: 36, height: 36),
-    Switch:
-        (widget, baseColor) =>
-            CheckboxSkeleton(baseColor: baseColor, width: 36, height: 36),
-    Radio<int>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<String>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<bool>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<double>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<Color>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<DateTime>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<Duration>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<Enum>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    Radio<void>:
-        (widget, baseColor) =>
-            RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
-    DropdownButton<int>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    TextField: (widget, baseColor) =>
+        TextFieldSkeleton(baseColor: baseColor, height: 48),
+    TextFormField: (widget, baseColor) =>
+        TextFieldSkeleton(baseColor: baseColor, height: 48),
+    Checkbox: (widget, baseColor) =>
+        CheckboxSkeleton(baseColor: baseColor, width: 36, height: 36),
+    Switch: (widget, baseColor) =>
+        CheckboxSkeleton(baseColor: baseColor, width: 36, height: 36),
+    Radio<int>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<String>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<bool>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<double>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<Color>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<DateTime>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<Duration>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<Enum>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    Radio<void>: (widget, baseColor) =>
+        RadioSkeleton(baseColor: baseColor, width: 20, height: 20),
+    DropdownButton<int>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    DropdownButton<String>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    DropdownButton<String>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    DropdownButton<bool>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    DropdownButton<bool>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    DropdownButton<double>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    DropdownButton<double>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    DropdownButton<Color>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    DropdownButton<Color>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    DropdownButton<Duration>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    DropdownButton<Duration>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<int>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<int>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<String>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<String>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<bool>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<bool>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<double>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<double>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<Color>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<Color>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<DateTime>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<DateTime>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<Duration>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<Duration>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    PopupMenuButton<void>:
-        (widget, baseColor) => DropdownButtonSkeleton(
+    PopupMenuButton<void>: (widget, baseColor) => DropdownButtonSkeleton(
           baseColor: baseColor,
           height: 48,
           width: 160,
         ),
-    Slider:
-        (widget, baseColor) => SliderSkeleton(baseColor: baseColor, height: 20),
+    Slider: (widget, baseColor) =>
+        SliderSkeleton(baseColor: baseColor, height: 20),
   };
 
   static Widget buildSkeleton(Widget widget, Color baseColor) {

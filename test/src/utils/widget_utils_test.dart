@@ -10,8 +10,8 @@ void main() {
         () {
           final widget = ListView.builder(
             itemCount: null,
-            itemBuilder:
-                (context, index) => ListTile(title: Text('Item $index')),
+            itemBuilder: (context, index) =>
+                ListTile(title: Text('Item $index')),
           );
 
           expect(WidgetUtils.getItemCount(widget), 5);
@@ -23,8 +23,8 @@ void main() {
         () {
           final widget = ListView.builder(
             itemCount: 10,
-            itemBuilder:
-                (context, index) => ListTile(title: Text('Item $index')),
+            itemBuilder: (context, index) =>
+                ListTile(title: Text('Item $index')),
           );
 
           expect(WidgetUtils.getItemCount(widget), 10);

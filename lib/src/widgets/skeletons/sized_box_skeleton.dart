@@ -19,13 +19,12 @@ class SizedBoxSkeleton extends BaseSkeleton {
     return Container(
       width: width,
       height: height,
-      decoration:
-          !isEmpty
-              ? BoxDecoration(
-                color: baseColor,
-                borderRadius: BorderRadius.circular(8),
-              )
-              : null,
+      decoration: !isEmpty
+          ? BoxDecoration(
+              color: baseColor,
+              borderRadius: BorderRadius.circular(8),
+            )
+          : null,
     );
   }
 }

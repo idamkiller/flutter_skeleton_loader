@@ -43,9 +43,9 @@ void main() {
         MaterialApp(home: Scaffold(body: AvatarSkeleton(baseColor: baseColor))),
       );
 
-      final decoration =
-          tester.widget<Container>(find.byType(Container)).decoration
-              as BoxDecoration;
+      final decoration = tester
+          .widget<Container>(find.byType(Container))
+          .decoration as BoxDecoration;
 
       expect(decoration.shape, BoxShape.circle);
       expect(decoration.borderRadius, null);
@@ -68,9 +68,9 @@ void main() {
           ),
         );
 
-        final decoration =
-            tester.widget<Container>(find.byType(Container)).decoration
-                as BoxDecoration;
+        final decoration = tester
+            .widget<Container>(find.byType(Container))
+            .decoration as BoxDecoration;
 
         expect(decoration.shape, BoxShape.rectangle);
         expect(decoration.borderRadius, BorderRadius.circular(size / 4));
@@ -83,9 +83,9 @@ void main() {
         MaterialApp(home: Scaffold(body: AvatarSkeleton(baseColor: baseColor))),
       );
 
-      final decoration =
-          tester.widget<Container>(find.byType(Container)).decoration
-              as BoxDecoration;
+      final decoration = tester
+          .widget<Container>(find.byType(Container))
+          .decoration as BoxDecoration;
 
       expect(decoration.color, baseColor);
     });
