@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'base_skeleton.dart';
 
-class CardSkeleton extends BaseSkeleton {
+class DefaultSkeleton extends BaseSkeleton {
   final double width;
   final double height;
 
-  const CardSkeleton({
+  const DefaultSkeleton({
     super.key,
     required super.baseColor,
     required this.width,
