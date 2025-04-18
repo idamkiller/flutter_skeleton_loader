@@ -1,8 +1,9 @@
 # Flutter Skeleton Loader
 
 [![pub package](https://img.shields.io/pub/v/flutter_skeleton_loader.svg)](https://pub.dev/packages/flutter_skeleton_loader)
+[![codecov](https://codecov.io/gh/idamkiller/flutter_skeleton_loader/graph/badge.svg?token=FAZOR3JA2I)](https://codecov.io/gh/idamkiller/flutter_skeleton_loader)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/idamkiller/flutter_skeleton_loader/actions/workflows/tests.yml/badge.svg)](https://github.com/idam/flutter_skeleton_loader/actions/workflows/tests.yml)
+[![Tests](https://github.com/idamkiller/flutter_skeleton_loader/actions/workflows/tests.yml/badge.svg)](https://github.com/idamkiller/flutter_skeleton_loader/actions/workflows/tests.yml)
 
 
 Una biblioteca Flutter para crear efectos de carga (skeletons) elegantes y personalizables para tus aplicaciones. Proporciona una forma sencilla de mostrar placeholders mientras se cargan los datos reales.
@@ -115,24 +116,30 @@ SkeletonLoader(
 ```dart
 SkeletonLoader(
   isLoading: isLoading,
-  child: Column(
-    children: [
-      TextField(
-        decoration: InputDecoration(labelText: 'Nombre'),
-      ),
-      SizedBox(height: 16),
-      TextField(
-        decoration: InputDecoration(labelText: 'Email'),
-      ),
-      SizedBox(height: 16),
-      ElevatedButton(
-        onPressed: () {},
-        child: Text('Enviar'),
-      ),
-    ],
+  child: Form(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        TextFormField(),
+        SizedBox(height: 10),
+        TextFormField(),
+        SizedBox(height: 10),
+        ElevatedButton(
+          key: const Key('submitButton'),
+          onPressed: () {},
+          child: const Text('Enviar'),
+        ),
+      ],
+    ),
   ),
 )
 ```
+
+![Demo de Flutter Skeleton Loader](screenshots/ejemplo_1.gif)
+![Demo de Flutter Skeleton Loader](screenshots/ejemplo_2.gif)
+![Demo de Flutter Skeleton Loader](screenshots/ejemplo_3.gif)
+![Demo de Flutter Skeleton Loader](screenshots/ejemplo_4.gif)
+![Demo de Flutter Skeleton Loader](screenshots/ejemplo_5.gif)
 
 ## Widgets soportados
 
