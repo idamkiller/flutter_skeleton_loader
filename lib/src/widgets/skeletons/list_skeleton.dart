@@ -22,15 +22,18 @@ class ListSkeleton extends BaseSkeleton {
       children: List.generate(
         itemCount,
         (index) => Padding(
+          key: Key('list_skeleton_padding_$index'),
           padding: EdgeInsets.only(
             bottom: index < itemCount - 1 ? itemSpacing : 0,
           ),
           child: Container(
+            key: Key('list_skeleton_container_$index'),
             height: itemHeight,
             decoration: BoxDecoration(
               color: baseColor,
               borderRadius: BorderRadius.circular(itemBorderRadius),
             ),
+            child: Column(children: []),
           ),
         ),
       ),
