@@ -5,7 +5,12 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2023-11-15
+## [1.0.1] - 2025-04-19
+
+### Añadido
+- Soporte para GestureDetector
+
+## [1.0.0] - 2025-04-18
 
 ### Añadido
 - Implementación inicial del paquete Flutter Skeleton Loader

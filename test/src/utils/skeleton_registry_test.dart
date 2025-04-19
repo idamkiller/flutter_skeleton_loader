@@ -617,9 +617,39 @@ void main() {
     testWidgets(
       'debería construir DefaultSkeleton para un widget no registrado y sin múltiples hijos',
       (tester) async {
-        final widget = GestureDetector(
+        final widget = InkWell(
           onTap: () {},
           child: Container(width: 100, height: 100, color: Colors.blue),
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<DefaultSkeleton>());
+        expect((skeleton as DefaultSkeleton).baseColor, baseColor);
+        expect(skeleton.width, 100);
+        expect(skeleton.height, 40);
+      },
+    );
+
+    testWidgets(
+      'debería construir TextSkeleton para un widget GestureDetector con child Text',
+      (tester) async {
+        final widget = GestureDetector(
+          onTap: () {},
+          child: Text('Hola Mundo'),
+        );
+        final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+        expect(skeleton, isA<TextSkeleton>());
+        expect((skeleton as TextSkeleton).text, 'Hola Mundo');
+        expect(skeleton.baseColor, baseColor);
+      },
+    );
+    testWidgets(
+      'debería construir DefaultSkeleton para un widget GestureDetector sin child',
+      (tester) async {
+        final widget = GestureDetector(
+          onTap: () {},
+          child: null,
         );
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
 

@@ -169,6 +169,9 @@ El paquete soporta automáticamente los siguientes widgets:
 - Wrap
 - Flex
 - Form
+- GestureDetector
+
+Para los widgets no soportados se crea un esqueleto genérico que se adapta a su tamaño.
 
 ## Personalización
 

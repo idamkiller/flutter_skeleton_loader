@@ -1,6 +1,6 @@
 name: flutter_skeleton_loader
-description: "Una biblioteca Flutter para crear efectos de carga (skeletons) elegantes y personalizables. Proporciona una forma sencilla de mostrar placeholders mientras se cargan los datos reales, con soporte para todos los widgets comunes de Flutter."
-version: 1.0.0
+description: Crea efectos de carga elegantes y personalizables en Flutter con soporte para widgets comunes mientras se cargan datos.
+version: 1.0.1
 homepage: https://github.com/idamkiller/flutter_skeleton_loader
 repository: https://github.com/idamkiller/flutter_skeleton_loader
 issue_tracker: https://github.com/idamkiller/flutter_skeleton_loader/issues

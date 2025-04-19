@@ -164,6 +164,13 @@ class SkeletonRegistry {
       return builder(widget, baseColor);
     }
 
+    if (widget is GestureDetector) {
+      final child = widget.child;
+      return child != null
+          ? buildSkeleton(child, baseColor)
+          : _buildDefaultSkeleton(baseColor);
+    }
+
     if (widget is Form) {
       return buildSkeleton(widget.child, baseColor);
     }
