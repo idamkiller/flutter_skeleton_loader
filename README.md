@@ -23,7 +23,7 @@ Agrega la dependencia a tu archivo `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_skeleton_loader: ^1.0.0
+  flutter_skeleton_loader: ^1.0.1
 ```
 
 Luego ejecuta:
