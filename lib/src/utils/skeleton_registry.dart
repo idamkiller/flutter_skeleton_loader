@@ -159,6 +159,13 @@ class SkeletonRegistry {
   };
 
   static Widget buildSkeleton(Widget widget, Color baseColor) {
+    if (widget is SizedBox && widget.child != null) {
+      return SizedBox(
+        width: widget.width,
+        height: widget.height,
+        child: buildSkeleton(widget.child!, baseColor),
+      );
+    }
     final builder = _registry[widget.runtimeType];
     if (builder != null) {
       return builder(widget, baseColor);
