@@ -23,7 +23,7 @@ Agrega la dependencia a tu archivo `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_skeleton_loader: ^1.0.1
+  flutter_skeleton_loader: ^1.1.0
 ```
 
 Luego ejecuta:
@@ -99,14 +99,18 @@ SkeletonLoader(
 ```dart
 SkeletonLoader(
   isLoading: isLoading,
-  child: ListView.builder(
-    itemCount: 10,
-    itemBuilder: (context, index) {
-      return ListTile(
-        title: Text('Item $index'),
-        subtitle: Text('Descripción del item $index'),
-      );
-    },
+  child: SizedBox(
+    height: 200,
+    width: double.infinity,
+    child: ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('Elemento $index'),
+          subtitle: Text('Descripción del elemento $index'),
+        );
+      },
+    ),
   ),
 )
 ```
@@ -177,38 +181,23 @@ Para los widgets no soportados se crea un esqueleto genérico que se adapta a su
 
 El widget `SkeletonLoader` proporciona varias propiedades para personalizar la apariencia y el comportamiento del efecto esqueleto:
 
-### Colores
-
 ```dart
 SkeletonLoader(
+  // Obligatorio: controla si se muestra el esqueleto o el contenido real
   isLoading: isLoading,
   // Color base del esqueleto
+  // Por defecto: Color(0xFFE0E0E0)
   baseColor: Colors.grey[300],
   // Color del efecto de brillo que se mueve a través del esqueleto.
+  // Por defecto: Color(0xFFEEEEEE)
   highlightColor: Colors.white,
-  // Color final del efecto.
-  endColor: Colors.grey[200],
-  child: YourWidget(),
-)
-```
-
-### Duración de la animación
-
-```dart
-SkeletonLoader(
-  isLoading: isLoading,
-  // Duración de la transición entre el esqueleto y el contenido real
+  // Duración del efecto de brillo
+  // Por defecto: Duration(milliseconds: 1500)
+  shimmerDuration: Duration(milliseconds: 1500),
+  // Duración de la animación de transición entre el esqueleto y el contenido real
+  // Por defecto: Duration(milliseconds: 500)
   transitionDuration: Duration(milliseconds: 500),
-  child: YourWidget(),
-)
-```
-
-### Estado de carga
-
-```dart
-SkeletonLoader(
-  // Controla si se muestra el esqueleto o el contenido real
-  isLoading: isLoading,
+  // Tu widget real
   child: YourWidget(),
 )
 ```
@@ -222,8 +211,8 @@ SkeletonLoader(
   isLoading: isLoading,
   baseColor: Colors.blue[100],
   highlightColor: Colors.blue[50],
-  endColor: Colors.blue[200],
   transitionDuration: Duration(milliseconds: 800),
+  shimmerDuration: Duration(milliseconds: 1500),
   child: YourWidget(),
 )
 ```

@@ -5,6 +5,19 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-04-20
+
+### Añadido
+- Mejora en manejo de SizedBox cuando trae un hijo
+- Optimización de rendimiento en el widget SkeletonLoader
+- Nuevo parámetro `shimmerDuration` para personalizar la duración de la animación
+- Mayor coherencia en la API de SkeletonLoader
+
+### Mejorado
+- Documentación más detallada para todos los parámetros
+- Rendimiento de animaciones con uso de RepaintBoundary
+- Calidad del efecto de shimmer con mejores transiciones
+
 ## [1.0.1] - 2025-04-19
 
 ### Añadido
