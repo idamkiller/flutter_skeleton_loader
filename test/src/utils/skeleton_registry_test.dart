@@ -40,7 +40,8 @@ void main() {
       expect((skeleton as ContainerSkeleton).baseColor, baseColor);
     });
 
-    testWidgets('debería construir SizedBoxSkeleton para un SizedBox', (
+    testWidgets('debería construir SizedBoxSkeleton para un SizedBox sin child',
+        (
       tester,
     ) async {
       final widget = SizedBox(width: 100, height: 100);
@@ -48,6 +49,33 @@ void main() {
 
       expect(skeleton, isA<SizedBoxSkeleton>());
       expect((skeleton as SizedBoxSkeleton).baseColor, baseColor);
+    });
+    testWidgets('debería construir SizedBox para un SizedBox con child', (
+      tester,
+    ) async {
+      final widget = SizedBox(
+        width: 100,
+        height: 10,
+        child: Text('Test'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<SizedBox>());
+    });
+    testWidgets(
+        'debería construir SizedBox con un child Skeleton para un SizedBox con child',
+        (
+      tester,
+    ) async {
+      final widget = SizedBox(
+        width: 100,
+        height: 10,
+        child: Text('Test'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<SizedBox>());
+      expect((skeleton as SizedBox).child, isA<TextSkeleton>());
     });
 
     testWidgets('debería construir CardSkeleton para un Card', (tester) async {
