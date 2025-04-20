@@ -2,61 +2,73 @@ import 'package:flutter/material.dart';
 import 'src/widgets/shimmer_effect.dart';
 import 'src/widgets/skeleton_builder.dart';
 
-/// A widget that displays a loading effect (skeleton) while the real content is loading.
+/// A widget that shows a skeleton loading animation while data is being loaded.
 ///
-/// This widget wraps any child widget and shows an animated skeleton when [isLoading] is true.
-/// The skeleton is automatically generated based on the child widget type, maintaining its dimensions
-/// and basic structure.
+/// The [SkeletonLoader] wraps any Flutter widget and automatically creates a skeleton
+/// version of it when [isLoading] is true. When the data is ready, it smoothly
+/// transitions to show the actual content.
 ///
-/// Usage example:
+/// The skeleton version mimics the structure of the original widget with a shimmer
+/// animation to indicate the loading state.
+///
+/// Example usage:
 /// ```dart
 /// SkeletonLoader(
-///   isLoading: isLoading,
-///   child: YourWidget(),
+///   isLoading: _isLoading, // Set to true while loading data
+///   child: Text('Content loaded successfully!'),
 /// )
 /// ```
+///
+/// You can customize the appearance of the skeleton by adjusting the [baseColor],
+/// [highlightColor], and animation speed with [shimmerDuration].
 class SkeletonLoader extends StatefulWidget {
-  /// The widget to be displayed when [isLoading] is false.
+  /// The widget to display when loading is complete.
+  ///
+  /// This widget will be analyzed to create an appropriate skeleton
+  /// representation when [isLoading] is true.
   final Widget child;
 
-  /// Indicates whether to show the skeleton or the real content.
-  /// Defaults to true.
+  /// Controls whether to show the skeleton or the actual content.
+  ///
+  /// When true, a skeleton version of [child] will be displayed with
+  /// a shimmer effect. When false, the actual [child] will be shown.
   final bool isLoading;
 
   /// The base color of the skeleton.
-  /// Defaults to [Colors.grey].
+  ///
+  /// This color serves as the primary color for skeleton representations.
+  /// Default is a light gray (0xFFE0E0E0).
   final Color baseColor;
 
-  /// The color of the shimmer effect that moves through the skeleton.
-  /// Defaults to [Colors.white].
+  /// The highlight color for the shimmer effect.
+  ///
+  /// This color creates the moving highlight that gives the skeleton
+  /// its animated appearance. Default is a lighter gray (0xFFEEEEEE).
   final Color highlightColor;
 
-  /// The final color of the shimmer effect.
-  /// Defaults to [Colors.grey].
-  final Color endColor;
+  /// The duration of one complete shimmer animation cycle.
+  ///
+  /// Controls how fast the highlight moves across the skeleton.
+  /// Default is 1.5 seconds.
+  final Duration shimmerDuration;
 
-  /// The duration of the transition between skeleton and real content.
-  /// Defaults to 300 milliseconds.
+  /// The duration of the transition between skeleton and content.
+  ///
+  /// Controls how quickly the UI changes from skeleton to actual content
+  /// when [isLoading] changes from true to false. Default is 300 milliseconds.
   final Duration transitionDuration;
 
-  /// Creates a new [SkeletonLoader].
+  /// Creates a skeleton loader widget.
   ///
-  /// The [child] parameter is required and represents the widget to be displayed
-  /// when [isLoading] is false.
-  ///
-  /// The other parameters are optional and have default values:
-  /// - [isLoading]: true
-  /// - [baseColor]: Colors.grey
-  /// - [highlightColor]: Colors.white
-  /// - [endColor]: Colors.grey
-  /// - [transitionDuration]: Duration(milliseconds: 300)
+  /// The [child] and [isLoading] parameters are required.
+  /// All other parameters have default values that can be customized.
   const SkeletonLoader({
     super.key,
     required this.child,
-    this.isLoading = true,
-    this.baseColor = Colors.grey,
-    this.highlightColor = Colors.white,
-    this.endColor = Colors.grey,
+    required this.isLoading,
+    this.baseColor = const Color(0xFFE0E0E0),
+    this.highlightColor = const Color(0xFFEEEEEE),
+    this.shimmerDuration = const Duration(milliseconds: 1500),
     this.transitionDuration = const Duration(milliseconds: 300),
   });
 
@@ -64,55 +76,65 @@ class SkeletonLoader extends StatefulWidget {
   State<SkeletonLoader> createState() => _SkeletonLoaderState();
 }
 
-/// Internal state of the [SkeletonLoader] widget.
-///
-/// This class handles the shimmer effect animation and the skeleton construction
-/// based on the child widget.
-class _SkeletonLoaderState extends State<SkeletonLoader>
-    with SingleTickerProviderStateMixin {
-  /// Controller for the shimmer effect animation.
-  late AnimationController _controller;
-
-  /// Animation that controls the movement of the shimmer effect.
-  late Animation<double> _animation;
-
-  /// Builder for the skeleton based on the child widget.
-  late SkeletonBuilder _skeletonBuilder;
+class _SkeletonLoaderState extends State<SkeletonLoader> {
+  late Widget _skeletonWidget;
+  late Widget _actualWidget;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    )..repeat();
-
-    _animation = Tween<double>(begin: -1.0, end: 2.0).animate(_controller);
-    _skeletonBuilder = SkeletonBuilder(baseColor: widget.baseColor);
+    _buildWidgets();
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  void didUpdateWidget(SkeletonLoader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.child != widget.child ||
+        oldWidget.baseColor != widget.baseColor ||
+        oldWidget.highlightColor != widget.highlightColor) {
+      _buildWidgets();
+    }
+  }
+
+  /// Builds and caches both the skeleton and actual widgets.
+  ///
+  /// This method is called on initialization and when relevant properties change.
+  /// Using [RepaintBoundary] improves performance by isolating the shimmer animation
+  /// and preventing unnecessary repaints of the widget tree.
+  void _buildWidgets() {
+    // RepaintBoundary is used to isolate the widget from the rest of the widget tree
+    // and prevent it from being affected by the shimmer effect.
+    // This is important for performance reasons, as it prevents unnecessary repaints.
+    _skeletonWidget = RepaintBoundary(
+      child: ShimmerEffect(
+        baseColor: widget.baseColor,
+        highlightColor: widget.highlightColor,
+        duration: widget.shimmerDuration,
+        child: _buildSkeletonFromWidget(widget.child, widget.baseColor),
+      ),
+    );
+
+    _actualWidget = RepaintBoundary(child: widget.child);
+  }
+
+  /// Converts a regular widget into its skeleton representation.
+  ///
+  /// Uses [SkeletonBuilder] to analyze the widget structure and create
+  /// an appropriate skeleton version based on the widget type.
+  Widget _buildSkeletonFromWidget(Widget widget, Color color) {
+    final skeletonBuilder = SkeletonBuilder(baseColor: color);
+    return skeletonBuilder.buildSkeleton(widget);
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
+    return AnimatedCrossFade(
+      firstChild: _skeletonWidget,
+      secondChild: _actualWidget,
       duration: widget.transitionDuration,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(opacity: animation, child: child);
-      },
-      child: widget.isLoading
-          ? ShimmerEffect(
-              animation: _animation,
-              baseColor: widget.baseColor,
-              highlightColor: widget.highlightColor,
-              endColor: widget.endColor,
-              child: _skeletonBuilder.buildSkeleton(widget.child),
-            )
-          : widget.child,
+      crossFadeState: widget.isLoading
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
     );
   }
 }
