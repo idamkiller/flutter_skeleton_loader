@@ -114,27 +114,45 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
       ),
     );
 
-    _actualWidget = RepaintBoundary(child: widget.child);
+    _actualWidget = widget.child;
   }
 
   /// Converts a regular widget into its skeleton representation.
   ///
   /// Uses [SkeletonBuilder] to analyze the widget structure and create
   /// an appropriate skeleton version based on the widget type.
-  Widget _buildSkeletonFromWidget(Widget widget, Color color) {
-    final skeletonBuilder = SkeletonBuilder(baseColor: color);
-    return skeletonBuilder.buildSkeleton(widget);
-  }
+  Widget _buildSkeletonFromWidget(Widget widget, Color color) =>
+      SkeletonBuilder(baseColor: color).buildSkeleton(widget);
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      firstChild: _skeletonWidget,
-      secondChild: _actualWidget,
-      duration: widget.transitionDuration,
-      crossFadeState: widget.isLoading
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return AnimatedCrossFade(
+          firstChild: _skeletonWidget,
+          secondChild: _actualWidget,
+          duration: widget.transitionDuration,
+          crossFadeState: widget.isLoading
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
+            return Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: <Widget>[
+                Positioned.fill(
+                  key: bottomChildKey,
+                  child: bottomChild,
+                ),
+                Positioned.fill(
+                  key: topChildKey,
+                  child: topChild,
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
