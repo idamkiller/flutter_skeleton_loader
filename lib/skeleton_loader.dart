@@ -114,7 +114,7 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
       ),
     );
 
-    _actualWidget = RepaintBoundary(child: widget.child);
+    _actualWidget = widget.child;
   }
 
   /// Converts a regular widget into its skeleton representation.
@@ -122,19 +122,45 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
   /// Uses [SkeletonBuilder] to analyze the widget structure and create
   /// an appropriate skeleton version based on the widget type.
   Widget _buildSkeletonFromWidget(Widget widget, Color color) {
-    final skeletonBuilder = SkeletonBuilder(baseColor: color);
-    return skeletonBuilder.buildSkeleton(widget);
+    return SkeletonBuilder(baseColor: color).buildSkeleton(widget);
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      firstChild: _skeletonWidget,
-      secondChild: _actualWidget,
-      duration: widget.transitionDuration,
-      crossFadeState: widget.isLoading
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return AnimatedCrossFade(
+          firstChild: _skeletonWidget,
+          secondChild: _actualWidget,
+          duration: widget.transitionDuration,
+          crossFadeState: widget.isLoading
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
+            // Custom layoutBuilder is used here to address rendering issues with
+            // the default AnimatedCrossFade layout. Specifically, the default
+            // behavior does not properly stack and align the skeleton and actual
+            // widgets during transitions, which can cause visual glitches.
+            // By using a Stack with Positioned.fill, we ensure that both widgets
+            // are properly aligned and occupy the same space, providing a smooth
+            // transition between the skeleton and the actual content.
+            return Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: <Widget>[
+                Positioned.fill(
+                  key: bottomChildKey,
+                  child: bottomChild,
+                ),
+                Positioned.fill(
+                  key: topChildKey,
+                  child: topChild,
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
