@@ -136,6 +136,13 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
               ? CrossFadeState.showFirst
               : CrossFadeState.showSecond,
           layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
+            // Custom layoutBuilder is used here to address rendering issues with
+            // the default AnimatedCrossFade layout. Specifically, the default
+            // behavior does not properly stack and align the skeleton and actual
+            // widgets during transitions, which can cause visual glitches.
+            // By using a Stack with Positioned.fill, we ensure that both widgets
+            // are properly aligned and occupy the same space, providing a smooth
+            // transition between the skeleton and the actual content.
             return Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
