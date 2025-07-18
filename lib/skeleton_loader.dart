@@ -121,8 +121,9 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
   ///
   /// Uses [SkeletonBuilder] to analyze the widget structure and create
   /// an appropriate skeleton version based on the widget type.
-  Widget _buildSkeletonFromWidget(Widget widget, Color color) =>
-      SkeletonBuilder(baseColor: color).buildSkeleton(widget);
+  Widget _buildSkeletonFromWidget(Widget widget, Color color) {
+    return SkeletonBuilder(baseColor: color).buildSkeleton(widget);
+  }
 
   @override
   Widget build(BuildContext context) {
