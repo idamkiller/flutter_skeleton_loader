@@ -5,6 +5,14 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2025-07-17
+
+### Fixes
+- Corrección de problemas de renderizado en el widget `SkeletonLoader` que causaban parpadeos en algunos dispositivos.
+- Mejora en la detección de cambios de estado para evitar renderizados innecesarios.
+- Ajustes en la lógica de animación para mejorar la fluidez del efecto shimmer.
+- Corrección de problemas de compatibilidad con algunos Widgets.
+
 ## [1.1.0] - 2025-04-20
 
 ### Añadido
