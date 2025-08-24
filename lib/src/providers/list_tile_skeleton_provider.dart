@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../interfaces/skeleton_provider.dart';
+import '../interfaces/base_skeleton_provider.dart';
 import '../widgets/skeletons/list_tile_skeleton.dart';
 
 class ListTileSkeletonProvider extends BaseSkeletonProvider {

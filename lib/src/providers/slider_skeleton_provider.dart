@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../flutter_skeleton_loader.dart';
+import '../interfaces/base_skeleton_provider.dart';
 
 class SliderSkeletonProvider extends BaseSkeletonProvider {
   @override

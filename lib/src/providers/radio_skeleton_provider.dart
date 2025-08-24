@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../interfaces/skeleton_provider.dart';
-import '../widgets/skeletons/radio_skeleton.dart';
+import '../../flutter_skeleton_loader.dart';
+import '../interfaces/base_skeleton_provider.dart';
 
 class RadioSkeletonProvider extends BaseSkeletonProvider {
   @override

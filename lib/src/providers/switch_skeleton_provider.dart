@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../interfaces/skeleton_provider.dart';
+import '../interfaces/base_skeleton_provider.dart';
 import '../widgets/skeletons/switch_skeleton.dart';
 
 class SwitchSkeletonProvider extends BaseSkeletonProvider {

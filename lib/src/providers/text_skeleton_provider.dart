@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../interfaces/skeleton_provider.dart';
+import '../interfaces/base_skeleton_provider.dart';
 import '../widgets/skeletons/text_skeleton.dart';
 
 class TextSkeletonProvider extends BaseSkeletonProvider {
