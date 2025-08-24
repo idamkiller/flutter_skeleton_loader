@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'base_skeleton.dart';
 
 class SizedBoxSkeleton extends BaseSkeleton {
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final bool isEmpty;
 
   const SizedBoxSkeleton({
     super.key,
     required super.baseColor,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     required this.isEmpty,
   });
 
