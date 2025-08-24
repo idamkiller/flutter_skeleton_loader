@@ -25,11 +25,6 @@ class SkeletonRegistry {
           height: widget.height ?? 10,
           isEmpty: widget.child == null,
         ),
-    Card: (widget, baseColor) => CardSkeleton(
-          baseColor: baseColor,
-          width: (widget as Card).child != null ? 100 : 0,
-          height: widget.child != null ? 100 : 0,
-        ),
     IconButton: (widget, baseColor) => IconButtonSkeleton(
           baseColor: baseColor,
           width: (widget as IconButton).iconSize ?? 24,
@@ -166,6 +161,48 @@ class SkeletonRegistry {
         child: buildSkeleton(widget.child!, baseColor),
       );
     }
+
+    if (widget is Expanded) {
+      return Expanded(
+        flex: widget.flex,
+        child: buildSkeleton(widget.child, baseColor),
+      );
+    }
+
+    if (widget is Flexible) {
+      return Flexible(
+        flex: widget.flex,
+        fit: widget.fit,
+        child: buildSkeleton(widget.child, baseColor),
+      );
+    }
+
+    if (widget is Padding) {
+      final child = widget.child;
+      if (child == null) {
+        return Padding(
+          padding: widget.padding,
+          child: _buildDefaultSkeleton(baseColor),
+        );
+      }
+      return Padding(
+        padding: widget.padding,
+        child: buildSkeleton(child, baseColor),
+      );
+    }
+
+    if (widget is Container && widget.child != null) {
+      return Container(
+        width: widget.constraints?.maxWidth,
+        height: widget.constraints?.maxHeight,
+        margin: widget.margin,
+        padding: widget.padding,
+        decoration: widget.decoration,
+        constraints: widget.constraints,
+        child: buildSkeleton(widget.child!, baseColor),
+      );
+    }
+
     final builder = _registry[widget.runtimeType];
     if (builder != null) {
       return builder(widget, baseColor);
@@ -182,7 +219,11 @@ class SkeletonRegistry {
       return buildSkeleton(widget.child, baseColor);
     }
 
-    if (widget is Row || widget is Column || widget is Wrap || widget is Flex) {
+    if (widget is Row ||
+        widget is Column ||
+        widget is Wrap ||
+        widget is Flex ||
+        widget is Card) {
       return _buildMultiChildSkeleton(widget, baseColor);
     }
 
@@ -191,52 +232,87 @@ class SkeletonRegistry {
 
   static Widget _buildMultiChildSkeleton(Widget widget, Color baseColor) {
     final List<Widget> children = [];
-    if (widget is MultiChildRenderObjectWidget) {
-      for (final child in widget.children) {
-        children.add(buildSkeleton(child, baseColor));
+
+    try {
+      if (widget is MultiChildRenderObjectWidget) {
+        for (final child in widget.children) {
+          children.add(buildSkeleton(child, baseColor));
+        }
       }
+
+      if (widget is Row) {
+        return IntrinsicHeight(
+          child: Row(
+            mainAxisSize: widget.mainAxisSize,
+            mainAxisAlignment: widget.mainAxisAlignment,
+            crossAxisAlignment: widget.crossAxisAlignment,
+            textDirection: widget.textDirection,
+            verticalDirection: widget.verticalDirection,
+            textBaseline: widget.textBaseline,
+            children: children,
+          ),
+        );
+      } else if (widget is Column) {
+        return IntrinsicWidth(
+          child: Column(
+            mainAxisSize: widget.mainAxisSize,
+            mainAxisAlignment: widget.mainAxisAlignment,
+            crossAxisAlignment: widget.crossAxisAlignment,
+            textDirection: widget.textDirection,
+            verticalDirection: widget.verticalDirection,
+            textBaseline: widget.textBaseline,
+            children: children,
+          ),
+        );
+      } else if (widget is Wrap) {
+        return Wrap(
+          runSpacing: widget.runSpacing,
+          alignment: widget.alignment,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          textDirection: widget.textDirection,
+          verticalDirection: widget.verticalDirection,
+          children: children,
+        );
+      } else if (widget is Card) {
+        return _buildCardSkeleton(widget, baseColor);
+      }
+
+      final Flex flexWidget = widget as Flex;
+      return Flex(
+        direction: flexWidget.direction,
+        mainAxisSize: flexWidget.mainAxisSize,
+        mainAxisAlignment: flexWidget.mainAxisAlignment,
+        crossAxisAlignment: flexWidget.crossAxisAlignment,
+        textDirection: flexWidget.textDirection,
+        verticalDirection: flexWidget.verticalDirection,
+        textBaseline: flexWidget.textBaseline,
+        children: children,
+      );
+    } catch (e) {
+      return _buildDefaultSkeleton(baseColor);
+    }
+  }
+
+  static Widget _buildCardSkeleton(Card widget, Color baseColor) {
+    Widget? processedChild;
+
+    if (widget.child != null) {
+      processedChild = buildSkeleton(widget.child!, baseColor);
+    } else {
+      processedChild = _buildDefaultSkeleton(baseColor);
     }
 
-    if (widget is Row) {
-      return Row(
-        mainAxisSize: widget.mainAxisSize,
-        mainAxisAlignment: widget.mainAxisAlignment,
-        crossAxisAlignment: widget.crossAxisAlignment,
-        textDirection: widget.textDirection,
-        verticalDirection: widget.verticalDirection,
-        textBaseline: widget.textBaseline,
-        children: children,
-      );
-    } else if (widget is Column) {
-      return Column(
-        mainAxisSize: widget.mainAxisSize,
-        mainAxisAlignment: widget.mainAxisAlignment,
-        crossAxisAlignment: widget.crossAxisAlignment,
-        textDirection: widget.textDirection,
-        verticalDirection: widget.verticalDirection,
-        textBaseline: widget.textBaseline,
-        children: children,
-      );
-    } else if (widget is Wrap) {
-      return Wrap(
-        runSpacing: widget.runSpacing,
-        alignment: widget.alignment,
-        crossAxisAlignment: widget.crossAxisAlignment,
-        textDirection: widget.textDirection,
-        verticalDirection: widget.verticalDirection,
-        children: children,
-      );
-    }
-    final Flex flexWidget = widget as Flex;
-    return Flex(
-      direction: flexWidget.direction,
-      mainAxisSize: flexWidget.mainAxisSize,
-      mainAxisAlignment: flexWidget.mainAxisAlignment,
-      crossAxisAlignment: flexWidget.crossAxisAlignment,
-      textDirection: flexWidget.textDirection,
-      verticalDirection: flexWidget.verticalDirection,
-      textBaseline: flexWidget.textBaseline,
-      children: children,
+    return Card(
+      key: widget.key,
+      color: widget.color,
+      shadowColor: widget.shadowColor,
+      surfaceTintColor: widget.surfaceTintColor,
+      elevation: widget.elevation,
+      shape: widget.shape,
+      borderOnForeground: widget.borderOnForeground,
+      margin: widget.margin,
+      clipBehavior: widget.clipBehavior,
+      child: processedChild,
     );
   }
 
