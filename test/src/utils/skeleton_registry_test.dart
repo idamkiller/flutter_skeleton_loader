@@ -82,8 +82,8 @@ void main() {
       final widget = Card(child: Container());
       final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
 
-      expect(skeleton, isA<CardSkeleton>());
-      expect((skeleton as CardSkeleton).baseColor, baseColor);
+      expect(skeleton, isA<Card>());
+      expect((skeleton as Card).child, isA<ContainerSkeleton>());
     });
 
     testWidgets('debería construir IconButtonSkeleton para un IconButton', (
@@ -572,8 +572,10 @@ void main() {
         final widget = Row(children: [Text('Texto 1'), Text('Texto 2')]);
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
 
-        expect(skeleton, isA<Row>());
-        final row = skeleton as Row;
+        expect(skeleton, isA<IntrinsicHeight>());
+        final intrinsicHeight = skeleton as IntrinsicHeight;
+        expect(intrinsicHeight.child, isA<Row>());
+        final row = intrinsicHeight.child as Row;
         expect(row.children.length, 2);
         expect(row.children[0], isA<TextSkeleton>());
         expect(row.children[1], isA<TextSkeleton>());
@@ -585,8 +587,10 @@ void main() {
         final widget = Column(children: [Text('Texto 1'), Text('Texto 2')]);
         final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
 
-        expect(skeleton, isA<Column>());
-        final column = skeleton as Column;
+        expect(skeleton, isA<IntrinsicWidth>());
+        final intrinsicWidth = skeleton as IntrinsicWidth;
+        expect(intrinsicWidth.child, isA<Column>());
+        final column = intrinsicWidth.child as Column;
         expect(column.children.length, 2);
         expect(column.children[0], isA<TextSkeleton>());
         expect(column.children[1], isA<TextSkeleton>());
@@ -687,5 +691,241 @@ void main() {
         expect(skeleton.height, 40);
       },
     );
+
+    // Tests para Expanded widgets
+    testWidgets('debería construir Expanded con skeleton del child', (
+      tester,
+    ) async {
+      final widget = Expanded(
+        flex: 2,
+        child: Text('Expanded Text'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Expanded>());
+      final expanded = skeleton as Expanded;
+      expect(expanded.flex, 2);
+      expect(expanded.child, isA<TextSkeleton>());
+      expect((expanded.child as TextSkeleton).text, 'Expanded Text');
+      expect((expanded.child as TextSkeleton).baseColor, baseColor);
+    });
+
+    testWidgets('debería construir Expanded con flex por defecto', (
+      tester,
+    ) async {
+      final widget = Expanded(
+        child: Container(width: 100, height: 50),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Expanded>());
+      final expanded = skeleton as Expanded;
+      expect(expanded.flex, 1); // valor por defecto
+      expect(expanded.child, isA<ContainerSkeleton>());
+    });
+
+    // Tests para Flexible widgets
+    testWidgets('debería construir Flexible con skeleton del child', (
+      tester,
+    ) async {
+      final widget = Flexible(
+        flex: 3,
+        fit: FlexFit.loose,
+        child: Icon(Icons.star),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Flexible>());
+      final flexible = skeleton as Flexible;
+      expect(flexible.flex, 3);
+      expect(flexible.fit, FlexFit.loose);
+      expect(flexible.child, isA<IconSkeleton>());
+      expect((flexible.child as IconSkeleton).baseColor, baseColor);
+    });
+
+    testWidgets('debería construir Flexible con valores por defecto', (
+      tester,
+    ) async {
+      final widget = Flexible(
+        child: Text('Flexible Text'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Flexible>());
+      final flexible = skeleton as Flexible;
+      expect(flexible.flex, 1); // valor por defecto
+      expect(flexible.fit, FlexFit.loose); // valor por defecto
+      expect(flexible.child, isA<TextSkeleton>());
+    });
+
+    // Tests para Padding widgets
+    testWidgets('debería construir Padding con skeleton del child', (
+      tester,
+    ) async {
+      final widget = Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text('Padded Text'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Padding>());
+      final padding = skeleton as Padding;
+      expect(padding.padding, const EdgeInsets.all(16.0));
+      expect(padding.child, isA<TextSkeleton>());
+      expect((padding.child as TextSkeleton).text, 'Padded Text');
+      expect((padding.child as TextSkeleton).baseColor, baseColor);
+    });
+
+    testWidgets('debería construir Padding sin child con DefaultSkeleton', (
+      tester,
+    ) async {
+      final widget = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: null,
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Padding>());
+      final padding = skeleton as Padding;
+      expect(padding.padding,
+          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0));
+      expect(padding.child, isA<DefaultSkeleton>());
+      expect((padding.child as DefaultSkeleton).baseColor, baseColor);
+      expect((padding.child as DefaultSkeleton).width, 100);
+      expect((padding.child as DefaultSkeleton).height, 40);
+    });
+
+    testWidgets('debería construir Padding con diferentes tipos de padding', (
+      tester,
+    ) async {
+      final widget = Padding(
+        padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+        child: Icon(Icons.home),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Padding>());
+      final padding = skeleton as Padding;
+      expect(padding.padding, const EdgeInsets.only(top: 12.0, bottom: 8.0));
+      expect(padding.child, isA<IconSkeleton>());
+    });
+
+    // Tests para Container con child
+    testWidgets('debería construir Container con skeleton del child', (
+      tester,
+    ) async {
+      final widget = Container(
+        width: 200,
+        height: 150,
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Text('Container Text'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Container>());
+      final container = skeleton as Container;
+      expect(container.margin, const EdgeInsets.all(8.0));
+      expect(container.padding, const EdgeInsets.all(12.0));
+      expect(container.decoration, isA<BoxDecoration>());
+      expect(container.child, isA<TextSkeleton>());
+      expect((container.child as TextSkeleton).text, 'Container Text');
+    });
+
+    testWidgets('debería construir Container con constraints y child', (
+      tester,
+    ) async {
+      final widget = Container(
+        constraints: const BoxConstraints(
+          minWidth: 100,
+          maxWidth: 300,
+          minHeight: 50,
+          maxHeight: 200,
+        ),
+        child: Icon(Icons.favorite),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Container>());
+      final container = skeleton as Container;
+      expect(container.constraints, isA<BoxConstraints>());
+      expect(container.constraints!.maxWidth, 300);
+      expect(container.constraints!.maxHeight, 200);
+      expect(container.child, isA<IconSkeleton>());
+    });
+
+    testWidgets('debería construir Container con child complejo', (
+      tester,
+    ) async {
+      final widget = Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            Text('Title'),
+            Icon(Icons.star),
+          ],
+        ),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Container>());
+      final container = skeleton as Container;
+      expect(container.padding, const EdgeInsets.all(16.0));
+      expect(container.child, isA<IntrinsicWidth>());
+
+      // Verificar que el Column interno tiene los skeletons correctos
+      final intrinsicWidth = container.child as IntrinsicWidth;
+      expect(intrinsicWidth.child, isA<Column>());
+      final column = intrinsicWidth.child as Column;
+      expect(column.children.length, 2);
+      expect(column.children[0], isA<TextSkeleton>());
+      expect(column.children[1], isA<IconSkeleton>());
+    });
+
+    testWidgets('debería preservar todas las propiedades del Container', (
+      tester,
+    ) async {
+      final widget = Container(
+        width: 250,
+        height: 180,
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          border: Border.all(color: Colors.black, width: 2.0),
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withValues(alpha: 0.5),
+              spreadRadius: 2,
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        constraints: const BoxConstraints(
+          minWidth: 200,
+          maxWidth: 400,
+        ),
+        child: Text('Complex Container'),
+      );
+      final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
+
+      expect(skeleton, isA<Container>());
+      final container = skeleton as Container;
+
+      // Verificar que se preservan las propiedades del Container original
+      expect(container.margin, const EdgeInsets.symmetric(horizontal: 16.0));
+      expect(container.padding, const EdgeInsets.symmetric(vertical: 8.0));
+      expect(container.decoration, equals(widget.decoration));
+      expect(container.constraints, equals(widget.constraints));
+      expect(container.child, isA<TextSkeleton>());
+    });
   });
 }

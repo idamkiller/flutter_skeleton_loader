@@ -14,13 +14,21 @@ void main() {
         ),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
-      final constraints = container.constraints;
-      expect(constraints?.maxWidth, double.infinity);
-      expect(constraints?.maxHeight, 48);
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, baseColor);
+      final textFieldSkeletonFinder = find.byType(TextFieldSkeleton);
+      expect(textFieldSkeletonFinder, findsOneWidget);
+
+      final size = tester.getSize(textFieldSkeletonFinder);
+      expect(size.height, 48);
+
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      expect(containers.length, greaterThan(0));
+
+      final mainContainer = containers.first;
+      final decoration = mainContainer.decoration as BoxDecoration;
       expect(decoration.borderRadius, BorderRadius.circular(8));
+
+      final decorationColor = decoration.color!;
+      expect(decorationColor.alpha, lessThan(255));
     });
 
     testWidgets('debería renderizar con dimensiones personalizadas', (
@@ -43,14 +51,14 @@ void main() {
         ),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
+      final textFieldSkeletonFinder = find.byType(TextFieldSkeleton);
+      final size = tester.getSize(textFieldSkeletonFinder);
+      expect(size.width, width);
+      expect(size.height, height);
 
-      final constraints = container.constraints;
-      expect(constraints?.maxWidth, width);
-      expect(constraints?.maxHeight, height);
-
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, baseColor);
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final mainContainer = containers.first;
+      final decoration = mainContainer.decoration as BoxDecoration;
       expect(decoration.borderRadius, BorderRadius.circular(borderRadius));
     });
 
@@ -62,9 +70,15 @@ void main() {
         ),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, baseColor);
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final mainContainer = containers.first;
+      final decoration = mainContainer.decoration as BoxDecoration;
+
+      final decorationColor = decoration.color!;
+      expect(decorationColor.red, baseColor.red);
+      expect(decorationColor.green, baseColor.green);
+      expect(decorationColor.blue, baseColor.blue);
+      expect(decorationColor.alpha, lessThan(255));
     });
 
     testWidgets('debería usar el borderRadius por defecto de 8', (
@@ -77,10 +91,109 @@ void main() {
         ),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
-
-      final decoration = container.decoration as BoxDecoration;
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final mainContainer = containers.first;
+      final decoration = mainContainer.decoration as BoxDecoration;
       expect(decoration.borderRadius, BorderRadius.circular(8));
+    });
+
+    testWidgets('debería renderizar correctamente en modo multiline', (
+      tester,
+    ) async {
+      const baseColor = Colors.grey;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TextFieldSkeleton(
+              baseColor: baseColor,
+              isMultiline: true,
+            ),
+          ),
+        ),
+      );
+
+      final textFieldSkeletonFinder = find.byType(TextFieldSkeleton);
+      final size = tester.getSize(textFieldSkeletonFinder);
+      expect(size.height, 120);
+    });
+
+    testWidgets(
+        'debería renderizar sin decoración cuando hasDecoration es false', (
+      tester,
+    ) async {
+      const baseColor = Colors.grey;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TextFieldSkeleton(
+              baseColor: baseColor,
+              hasDecoration: false,
+            ),
+          ),
+        ),
+      );
+
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final mainContainer = containers.first;
+      final decoration = mainContainer.decoration as BoxDecoration;
+
+      expect(decoration.border, isNull);
+    });
+
+    testWidgets('debería tener border cuando hasDecoration es true', (
+      tester,
+    ) async {
+      const baseColor = Colors.grey;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TextFieldSkeleton(
+              baseColor: baseColor,
+              hasDecoration: true,
+            ),
+          ),
+        ),
+      );
+
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final mainContainer = containers.first;
+      final decoration = mainContainer.decoration as BoxDecoration;
+
+      expect(decoration.border, isNotNull);
+    });
+
+    testWidgets('debería mostrar elementos internos correctamente', (
+      tester,
+    ) async {
+      const baseColor = Colors.grey;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TextFieldSkeleton(
+              baseColor: baseColor,
+              width: 200,
+              height: 60,
+            ),
+          ),
+        ),
+      );
+
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      expect(containers.length, greaterThan(1));
+
+      expect(find.byType(Padding), findsWidgets);
+
+      expect(find.byType(Column), findsOneWidget);
+    });
+
+    testWidgets('debería heredar propiedades de BaseSkeleton', (tester) async {
+      const baseColor = Colors.red;
+      const textFieldSkeleton = TextFieldSkeleton(baseColor: baseColor);
+
+      expect(textFieldSkeleton.baseColor, baseColor);
+      expect(textFieldSkeleton.borderRadius, 8);
+      expect(textFieldSkeleton.isMultiline, false);
+      expect(textFieldSkeleton.hasDecoration, true);
     });
   });
 }
