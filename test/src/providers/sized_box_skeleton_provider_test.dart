@@ -77,7 +77,11 @@ void main() {
 
       test('Debería retornar false para widgets que no son SizedBox', () {
         const textWidget = Text('No es un SizedBox');
-        final containerWidget = Container(width: 100, height: 100);
+        final containerWidget = Container(
+          width: 100,
+          height: 100,
+          color: Colors.red,
+        );
         const expandedWidget = Expanded(child: Text('Expanded'));
         const flexibleWidget = Flexible(child: Text('Flexible'));
         final paddingWidget = Padding(

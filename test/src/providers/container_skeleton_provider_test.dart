@@ -25,6 +25,7 @@ void main() {
 
       test('Debería devolver verdadero para Container con child', () {
         final containerWidget = Container(
+          color: Colors.green,
           width: 200,
           height: 100,
           child: const Text('Content'),

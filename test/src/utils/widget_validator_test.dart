@@ -127,7 +127,7 @@ void main() {
       });
 
       test('Debe manejar el proceso de validación sin errores', () {
-        final validWidget = Container(
+        final validWidget = SizedBox(
           width: 100,
           height: 50,
           child: const Text('Test'),
@@ -229,6 +229,7 @@ void main() {
 
       test('Debe sanitizar recursivamente los widgets hijos', () {
         final containerWithProblematicChild = Container(
+          color: Colors.green,
           child: const SizedBox(
             width: double.infinity,
             height: double.infinity,
@@ -259,6 +260,7 @@ void main() {
 
       test('Debe manejar el proceso de sanitización sin errores', () {
         final validWidget = Container(
+          color: Colors.green,
           width: 100,
           height: 50,
           child: const Text('Test'),
@@ -395,6 +397,7 @@ void main() {
 
       test('Debe manejar Container sin hijo', () {
         final container = Container(
+          color: Colors.green,
           width: 100,
           height: 50,
         );
@@ -425,8 +428,8 @@ void main() {
           child: Column(
             children: [
               Expanded(
-                child: Container(
-                  child: const SizedBox(
+                child: const SizedBox(
+                  child: SizedBox(
                     width: double.infinity,
                     height: double.infinity,
                     child: Text('Deep nesting'),

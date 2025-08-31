@@ -714,7 +714,11 @@ void main() {
       tester,
     ) async {
       final widget = Expanded(
-        child: Container(width: 100, height: 50),
+        child: Container(
+          width: 100,
+          height: 50,
+          color: Colors.red,
+        ),
       );
       final skeleton = SkeletonRegistry.buildSkeleton(widget, baseColor);
 

@@ -500,7 +500,7 @@ void main() {
   group('SkeletonLoader - Manejo de errores', () {
     testWidgets('Debería manejar errores en construcción de skeleton',
         (WidgetTester tester) async {
-      final problematicWidget = Container(
+      final problematicWidget = SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: const Text('Valid content'),
@@ -828,7 +828,7 @@ void main() {
                 return SkeletonLoader(
                   isLoading: true,
                   child: causeError
-                      ? Container(width: -1, height: -1)
+                      ? SizedBox(width: -1, height: -1)
                       : const Text('Valid content'),
                 );
               },
@@ -901,11 +901,11 @@ void main() {
       final skeletonLoader = SkeletonLoader(
         key: customKey,
         isLoading: true,
-        child: customChild,
         baseColor: customBaseColor,
         highlightColor: customHighlightColor,
         shimmerDuration: customShimmerDuration,
         transitionDuration: customTransitionDuration,
+        child: customChild,
       );
 
       await tester.pumpWidget(
@@ -948,8 +948,8 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child1,
               baseColor: color1,
+              child: child1,
             ),
           ),
         ),
@@ -962,8 +962,8 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child2,
               baseColor: color2,
+              child: child2,
             ),
           ),
         ),
@@ -982,8 +982,8 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child,
               baseColor: baseColor,
+              child: child,
             ),
           ),
         ),
@@ -1016,8 +1016,8 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child,
               highlightColor: initialHighlight,
+              child: child,
             ),
           ),
         ),
@@ -1033,8 +1033,8 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child,
               highlightColor: newHighlight,
+              child: child,
             ),
           ),
         ),
@@ -1053,10 +1053,10 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child,
               baseColor: const Color(0xFF111111),
               highlightColor: const Color(0xFF222222),
               shimmerDuration: const Duration(seconds: 1),
+              child: child,
             ),
           ),
         ),
@@ -1069,10 +1069,10 @@ void main() {
           home: Scaffold(
             body: SkeletonLoader(
               isLoading: true,
-              child: child,
               baseColor: const Color(0xFF333333),
               highlightColor: const Color(0xFF444444),
               shimmerDuration: const Duration(seconds: 2),
+              child: child,
             ),
           ),
         ),

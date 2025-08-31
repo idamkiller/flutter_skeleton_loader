@@ -123,7 +123,7 @@ void main() {
 
       test('Debería retornar false para widgets que no son Radio', () {
         const textWidget = Text('No es un radio');
-        final containerWidget = Container(width: 100, height: 100);
+        final containerWidget = SizedBox(width: 100, height: 100);
         const checkboxWidget = Checkbox(value: true, onChanged: null);
         const switchWidget = Switch(value: true, onChanged: null);
         const elevatedButtonWidget = ElevatedButton(

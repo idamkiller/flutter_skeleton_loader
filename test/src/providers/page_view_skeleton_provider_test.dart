@@ -475,7 +475,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: Container(
+              body: SizedBox(
                 width: 300,
                 child: skeleton,
               ),
@@ -737,7 +737,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: Container(
+              body: SizedBox(
                 width: 50,
                 height: 50,
                 child: skeleton,
@@ -774,9 +774,9 @@ void main() {
           MaterialApp(
             home: Scaffold(
               body: skeleton,
-              bottomNavigationBar: Container(
+              bottomNavigationBar: const SizedBox(
                 height: 60,
-                child: const Center(child: Text('Indicadores')),
+                child: Center(child: Text('Indicadores')),
               ),
             ),
           ),
@@ -845,7 +845,7 @@ void main() {
               body: Column(
                 children: [
                   Expanded(child: skeleton),
-                  Container(
+                  SizedBox(
                     height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

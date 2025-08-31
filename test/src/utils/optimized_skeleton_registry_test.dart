@@ -515,12 +515,12 @@ void main() {
               Row(
                 children: [
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       child: const Text('Left'),
                     ),
                   ),
                   Flexible(
-                    child: Container(
+                    child: SizedBox(
                       child: const Text('Right'),
                     ),
                   ),
