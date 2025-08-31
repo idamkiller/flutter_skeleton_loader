@@ -3,28 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_skeleton_loader/src/interfaces/skeleton_provider.dart';
 import '../../../test/mocks/test_skeleton_provider.dart';
 import '../../../test/mocks/default_priority_provider.dart';
+import '../../mocks/default_priority_skeleton_provider.dart';
 import '../../mocks/high_priority_provider.dart';
+import '../../mocks/implicit_default_priority_provider.dart';
 import '../../mocks/low_priority_provider.dart';
 import '../../mocks/negative_priority_provider.dart';
 import '../../mocks/simple_skeleton_provider.dart';
-
-// Provider que usa la prioridad por defecto
-class DefaultPrioritySkeletonProvider implements SkeletonProvider {
-  @override
-  bool canHandle(Widget widget) => widget is SizedBox;
-
-  @override
-  Widget createSkeleton(Widget originalWidget, Color baseColor) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(color: baseColor),
-    );
-  }
-
-  @override
-  int get priority => 0;
-}
 
 void main() {
   group('SkeletonProvider', () {
@@ -32,6 +16,7 @@ void main() {
     late HighPriorityProvider highPriorityProvider;
     late LowPriorityProvider lowPriorityProvider;
     late DefaultPrioritySkeletonProvider defaultPriorityProvider;
+    late ImplicitDefaultPriorityProvider implicitDefaultProvider;
     late TestSkeletonProvider testProvider;
     late DefaultPriorityProvider baseDefaultProvider;
     const baseColor = Color(0xFFE0E0E0);
@@ -41,6 +26,7 @@ void main() {
       highPriorityProvider = HighPriorityProvider();
       lowPriorityProvider = LowPriorityProvider();
       defaultPriorityProvider = DefaultPrioritySkeletonProvider();
+      implicitDefaultProvider = ImplicitDefaultPriorityProvider();
       testProvider = TestSkeletonProvider();
       baseDefaultProvider = DefaultPriorityProvider();
     });
@@ -65,6 +51,11 @@ void main() {
         expect(defaultPriorityProvider.priority, 0);
       });
 
+      test('Debería usar la implementación por defecto de la interfaz', () {
+        // Este test cubre la línea 22: int get priority => 0; de SkeletonProvider
+        expect(implicitDefaultProvider.priority, 0);
+      });
+
       test('Debería permitir sobrescribir la prioridad', () {
         expect(simpleProvider.priority, 3);
         expect(highPriorityProvider.priority, 10);
@@ -77,24 +68,33 @@ void main() {
         const textWidget = Text('test');
         const iconWidget = Icon(Icons.star);
         final imageWidget = Image.asset('test.png');
+        const fabWidget = FloatingActionButton(onPressed: null);
 
         expect(simpleProvider.canHandle(textWidget), isTrue);
         expect(highPriorityProvider.canHandle(iconWidget), isTrue);
         expect(lowPriorityProvider.canHandle(imageWidget), isTrue);
+        expect(implicitDefaultProvider.canHandle(fabWidget), isTrue);
       });
 
       test('Debería retornar false para widgets que no puede manejar', () {
         const textWidget = Text('test');
         const iconWidget = Icon(Icons.star);
         final imageWidget = Image.asset('test.png');
+        const fabWidget = FloatingActionButton(onPressed: null);
         final containerWidget = Container();
 
         expect(simpleProvider.canHandle(iconWidget), isFalse);
         expect(simpleProvider.canHandle(imageWidget), isFalse);
+        expect(simpleProvider.canHandle(fabWidget), isFalse);
         expect(highPriorityProvider.canHandle(textWidget), isFalse);
         expect(highPriorityProvider.canHandle(containerWidget), isFalse);
+        expect(highPriorityProvider.canHandle(fabWidget), isFalse);
         expect(lowPriorityProvider.canHandle(textWidget), isFalse);
         expect(lowPriorityProvider.canHandle(iconWidget), isFalse);
+        expect(lowPriorityProvider.canHandle(fabWidget), isFalse);
+        expect(implicitDefaultProvider.canHandle(textWidget), isFalse);
+        expect(implicitDefaultProvider.canHandle(iconWidget), isFalse);
+        expect(implicitDefaultProvider.canHandle(imageWidget), isFalse);
       });
 
       test('Debería ser consistente en múltiples llamadas', () {
@@ -161,16 +161,17 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('Debería crear un skeleton válido para Image',
+      testWidgets('Debería crear un skeleton válido para FloatingActionButton',
           (tester) async {
-        final imageWidget = Image.asset('test.png');
+        const fabWidget = FloatingActionButton(onPressed: null);
         final skeleton =
-            lowPriorityProvider.createSkeleton(imageWidget, baseColor);
+            implicitDefaultProvider.createSkeleton(fabWidget, baseColor);
 
         expect(skeleton, isA<Container>());
         final container = skeleton as Container;
         final decoration = container.decoration as BoxDecoration?;
         expect(decoration?.color, baseColor);
+        expect(decoration?.shape, BoxShape.circle);
 
         await tester.pumpWidget(
           MaterialApp(
@@ -196,16 +197,22 @@ void main() {
       test('Debería crear skeletons diferentes para widgets diferentes', () {
         const textWidget = Text('test');
         const iconWidget = Icon(Icons.star);
+        const fabWidget = FloatingActionButton(onPressed: null);
 
         final textSkeleton =
             simpleProvider.createSkeleton(textWidget, baseColor);
         final iconSkeleton =
             highPriorityProvider.createSkeleton(iconWidget, baseColor);
+        final fabSkeleton =
+            implicitDefaultProvider.createSkeleton(fabWidget, baseColor);
 
         // Los skeletons deben ser diferentes objetos
         expect(textSkeleton, isNot(same(iconSkeleton)));
+        expect(textSkeleton, isNot(same(fabSkeleton)));
+        expect(iconSkeleton, isNot(same(fabSkeleton)));
         expect(textSkeleton, isA<Container>());
         expect(iconSkeleton, isA<Container>());
+        expect(fabSkeleton, isA<Container>());
       });
 
       testWidgets('Debería manejar múltiples skeletons en el mismo widget tree',
@@ -236,6 +243,8 @@ void main() {
     group('priority', () {
       test('Debería retornar diferentes valores de prioridad', () {
         expect(defaultPriorityProvider.priority, 0);
+        expect(implicitDefaultProvider.priority,
+            0); // Usa implementación por defecto
         expect(lowPriorityProvider.priority, 1);
         expect(simpleProvider.priority, 3);
         expect(testProvider.priority, 5);
@@ -257,6 +266,7 @@ void main() {
       test('Debería mantener orden de prioridad para sorting', () {
         final providers = [
           defaultPriorityProvider,
+          implicitDefaultProvider,
           lowPriorityProvider,
           simpleProvider,
           testProvider,
@@ -270,7 +280,9 @@ void main() {
         expect(providers[1], testProvider); // priority 5
         expect(providers[2], simpleProvider); // priority 3
         expect(providers[3], lowPriorityProvider); // priority 1
-        expect(providers[4], defaultPriorityProvider); // priority 0
+        // Los dos con priority 0 pueden estar en cualquier orden
+        expect(providers[4].priority, 0);
+        expect(providers[5].priority, 0);
       });
     });
 
@@ -283,36 +295,61 @@ void main() {
         // HighPriorityProvider detecta otro tipo
         expect(highPriorityProvider.canHandle(const Icon(Icons.star)), isTrue);
         expect(highPriorityProvider.canHandle(const Text('test')), isFalse);
+
+        // ImplicitDefaultProvider detecta FloatingActionButton
+        expect(
+            implicitDefaultProvider
+                .canHandle(const FloatingActionButton(onPressed: null)),
+            isTrue);
+        expect(implicitDefaultProvider.canHandle(const Text('test')), isFalse);
       });
 
       test('Debería permitir diferentes estrategias de generación', () {
         const textWidget = Text('test');
         const iconWidget = Icon(Icons.star);
+        const fabWidget = FloatingActionButton(onPressed: null);
 
         final textSkeleton =
             simpleProvider.createSkeleton(textWidget, baseColor);
         final iconSkeleton =
             highPriorityProvider.createSkeleton(iconWidget, baseColor);
+        final fabSkeleton =
+            implicitDefaultProvider.createSkeleton(fabWidget, baseColor);
 
         // Verificar que generan diferentes tipos de skeletons
         expect(textSkeleton, isA<Container>());
         expect(iconSkeleton, isA<Container>());
+        expect(fabSkeleton, isA<Container>());
+
+        // Verificar diferencias específicas
+        final fabContainer = fabSkeleton as Container;
+        final fabDecoration = fabContainer.decoration as BoxDecoration?;
+        expect(fabDecoration?.shape, BoxShape.circle); // FAB es circular
 
         // Diferentes instancias para diferentes tipos
         expect(textSkeleton, isNot(same(iconSkeleton)));
+        expect(textSkeleton, isNot(same(fabSkeleton)));
+        expect(iconSkeleton, isNot(same(fabSkeleton)));
       });
 
       test('Debería mantener independencia entre providers', () {
         const widget = Text('test');
+        const fabWidget = FloatingActionButton(onPressed: null);
 
         // Un provider no debería afectar a otro
         expect(simpleProvider.canHandle(widget), isTrue);
         expect(highPriorityProvider.canHandle(widget), isFalse);
         expect(lowPriorityProvider.canHandle(widget), isFalse);
+        expect(implicitDefaultProvider.canHandle(widget), isFalse);
+
+        // Verificar que cada provider maneja solo su tipo específico
+        expect(implicitDefaultProvider.canHandle(fabWidget), isTrue);
+        expect(simpleProvider.canHandle(fabWidget), isFalse);
 
         // Crear skeleton con un provider no debería afectar otros
         simpleProvider.createSkeleton(widget, baseColor);
         expect(highPriorityProvider.canHandle(const Icon(Icons.star)), isTrue);
+        expect(implicitDefaultProvider.canHandle(fabWidget), isTrue);
       });
     });
 
@@ -405,6 +442,7 @@ void main() {
           highPriorityProvider,
           lowPriorityProvider,
           defaultPriorityProvider,
+          implicitDefaultProvider,
           testProvider,
           baseDefaultProvider,
         ];
@@ -423,6 +461,7 @@ void main() {
           simpleProvider,
           highPriorityProvider,
           lowPriorityProvider,
+          implicitDefaultProvider,
           testProvider,
         ];
 
