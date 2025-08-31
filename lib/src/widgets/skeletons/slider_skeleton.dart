@@ -10,6 +10,7 @@ class SliderSkeleton extends BaseSkeleton {
   Widget build(BuildContext context) {
     return Container(
       height: height ?? 20,
+      width: double.infinity,
       decoration: BoxDecoration(
         color: baseColor,
         borderRadius: BorderRadius.circular(10),

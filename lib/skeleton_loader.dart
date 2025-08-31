@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'flutter_skeleton_loader.dart';
 import 'src/widgets/shimmer_effect.dart';
 import 'src/widgets/skeleton_builder.dart';
 
-/// A widget that shows a skeleton loading animation while data is being loaded.
-///
-/// The [SkeletonLoader] wraps any Flutter widget and automatically creates a skeleton
+/// [SkeletonLoader] wraps any Flutter widget and automatically creates a skeleton
 /// version of it when [isLoading] is true. When the data is ready, it smoothly
 /// transitions to show the actual content.
 ///
@@ -62,15 +61,57 @@ class SkeletonLoader extends StatefulWidget {
   ///
   /// The [child] and [isLoading] parameters are required.
   /// All other parameters have default values that can be customized.
-  const SkeletonLoader({
+
+  /// [CONSTRUCTOR INTERNO] Constructor privado real
+  const SkeletonLoader._internal({
     super.key,
     required this.child,
     required this.isLoading,
-    this.baseColor = const Color(0xFFE0E0E0),
-    this.highlightColor = const Color(0xFFEEEEEE),
-    this.shimmerDuration = const Duration(milliseconds: 1500),
-    this.transitionDuration = const Duration(milliseconds: 300),
+    required this.baseColor,
+    required this.highlightColor,
+    required this.shimmerDuration,
+    required this.transitionDuration,
   });
+
+  /// [SkeletonLoader] wraps any Flutter widget and automatically creates a skeleton
+  /// version of it when [isLoading] is true. When the data is ready, it smoothly
+  /// transitions to show the actual content.
+  ///
+  /// The skeleton version mimics the structure of the original widget with a shimmer
+  /// animation to indicate the loading state.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// SkeletonLoader(
+  ///   isLoading: _isLoading, // Set to true while loading data
+  ///   child: Text('Content loaded successfully!'),
+  /// )
+  /// ```
+  ///
+  /// You can customize the appearance of the skeleton by adjusting the [baseColor],
+  /// [highlightColor], and animation speed with [shimmerDuration].
+  factory SkeletonLoader({
+    Key? key,
+    required Widget child,
+    required bool isLoading,
+    Color? baseColor,
+    Color? highlightColor,
+    Duration? shimmerDuration,
+    Duration? transitionDuration,
+  }) {
+    final config = SkeletonConfig.instance;
+
+    return SkeletonLoader._internal(
+      key: key,
+      isLoading: isLoading,
+      baseColor: baseColor ?? config.defaultBaseColor,
+      highlightColor: highlightColor ?? config.defaultHighlightColor,
+      shimmerDuration: shimmerDuration ?? config.defaultShimmerDuration,
+      transitionDuration:
+          transitionDuration ?? config.defaultTransitionDuration,
+      child: child,
+    );
+  }
 
   @override
   State<SkeletonLoader> createState() => _SkeletonLoaderState();
@@ -79,6 +120,14 @@ class SkeletonLoader extends StatefulWidget {
 class _SkeletonLoaderState extends State<SkeletonLoader> {
   late Widget _skeletonWidget;
   late Widget _actualWidget;
+
+  /// [CACHE SYSTEM] Variables to avoid unnecessary rebuilds
+  String? _cachedSkeletonKey;
+
+  /// [CACHE KEY] Generates a unique key based on the widget's properties
+  String _generateSkeletonKey() {
+    return '${widget.child.runtimeType}_${widget.child.hashCode}_${widget.baseColor.value}_${widget.highlightColor.value}';
+  }
 
   @override
   void initState() {
@@ -89,9 +138,14 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
   @override
   void didUpdateWidget(SkeletonLoader oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.child != widget.child ||
+
+    /// [CACHE OPTIMIZATION] Only rebuild if relevant properties changed
+    final hasRelevantChanges = oldWidget.child != widget.child ||
         oldWidget.baseColor != widget.baseColor ||
-        oldWidget.highlightColor != widget.highlightColor) {
+        oldWidget.highlightColor != widget.highlightColor ||
+        oldWidget.shimmerDuration != widget.shimmerDuration;
+
+    if (hasRelevantChanges) {
       _buildWidgets();
     }
   }
@@ -101,20 +155,49 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
   /// This method is called on initialization and when relevant properties change.
   /// Using [RepaintBoundary] improves performance by isolating the shimmer animation
   /// and preventing unnecessary repaints of the widget tree.
+  ///
+  /// [CACHE SYSTEM IMPLEMENTED] Avoids unnecessary rebuilds
   void _buildWidgets() {
-    // RepaintBoundary is used to isolate the widget from the rest of the widget tree
-    // and prevent it from being affected by the shimmer effect.
-    // This is important for performance reasons, as it prevents unnecessary repaints.
-    _skeletonWidget = RepaintBoundary(
-      child: ShimmerEffect(
-        baseColor: widget.baseColor,
-        highlightColor: widget.highlightColor,
-        duration: widget.shimmerDuration,
-        child: _buildSkeletonFromWidget(widget.child, widget.baseColor),
-      ),
-    );
+    try {
+      final newKey = _generateSkeletonKey();
 
-    _actualWidget = widget.child;
+      /// [CACHE VERIFICATION] Only rebuild skeleton if key changed
+      if (_cachedSkeletonKey != newKey) {
+        // RepaintBoundary is used to isolate the widget from the rest of the widget tree
+        // and prevent it from being affected by the shimmer effect.
+        // This is important for performance reasons, as it prevents unnecessary repaints.
+        _skeletonWidget = RepaintBoundary(
+          child: ShimmerEffect(
+            baseColor: widget.baseColor,
+            highlightColor: widget.highlightColor,
+            duration: widget.shimmerDuration,
+            child: _buildSkeletonFromWidget(widget.child, widget.baseColor),
+          ),
+        );
+
+        _cachedSkeletonKey = newKey;
+      }
+
+      _actualWidget = widget.child;
+    } catch (e) {
+      // Create default skeleton in case of error
+      _skeletonWidget = RepaintBoundary(
+        child: ShimmerEffect(
+          baseColor: widget.baseColor,
+          highlightColor: widget.highlightColor,
+          duration: widget.shimmerDuration,
+          child: Container(
+            width: 100,
+            height: 40,
+            decoration: BoxDecoration(
+              color: widget.baseColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      );
+      _actualWidget = widget.child;
+    }
   }
 
   /// Converts a regular widget into its skeleton representation.
@@ -127,40 +210,20 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return AnimatedCrossFade(
-          firstChild: _skeletonWidget,
-          secondChild: _actualWidget,
-          duration: widget.transitionDuration,
-          crossFadeState: widget.isLoading
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
-          layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
-            // Custom layoutBuilder is used here to address rendering issues with
-            // the default AnimatedCrossFade layout. Specifically, the default
-            // behavior does not properly stack and align the skeleton and actual
-            // widgets during transitions, which can cause visual glitches.
-            // By using a Stack with Positioned.fill, we ensure that both widgets
-            // are properly aligned and occupy the same space, providing a smooth
-            // transition between the skeleton and the actual content.
-            return Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: <Widget>[
-                Positioned.fill(
-                  key: bottomChildKey,
-                  child: bottomChild,
-                ),
-                Positioned.fill(
-                  key: topChildKey,
-                  child: topChild,
-                ),
-              ],
-            );
-          },
-        );
-      },
+    /// [SIMPLE LAYOUT SOLUTION]
+    /// Using AnimatedSwitcher is more stable than AnimatedCrossFade
+    /// to avoid "RenderBox was not laid out" issues
+    return AnimatedSwitcher(
+      duration: widget.transitionDuration,
+      child: widget.isLoading
+          ? KeyedSubtree(
+              key: const ValueKey('skeleton'),
+              child: _skeletonWidget,
+            )
+          : KeyedSubtree(
+              key: const ValueKey('content'),
+              child: _actualWidget,
+            ),
     );
   }
 }

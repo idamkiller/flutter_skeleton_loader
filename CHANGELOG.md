@@ -1,9 +1,101 @@
 # Changelog
 
-Todos los cambios notables en este proyecto serán documentados en este archivo.
+## [2.0.0] - 2025-08-23
 
-El formato está basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/),
-y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### ⚡ MEJORAS MAYORES DE RENDIMIENTO Y ARQUITECTURA
+
+#### Añadido
+- **Sistema de caché inteligente** para skeletons - reduce reconstrucciones.
+- **Configuración global** con `SkeletonConfig` para valores por defecto centralizados.
+- **Builder Pattern** con `SkeletonLoaderBuilder` para API más fluida e intuitiva.
+- **Arquitectura modular** basada en providers para mejor extensibilidad.
+- **Validador de widgets** que previene errores comunes de renderizado.
+- **Registry optimizado** con lazy loading y sistema de prioridades.
+- **Utilidades de testing** para facilitar pruebas automatizadas.
+- **Manejo robusto de errores** con fallbacks automáticos.
+- **Ejemplos avanzados** demostrando todas las nuevas funcionalidades.
+
+#### Mejorado
+- **ShimmerEffect optimizado** - mejor rendimiento en animaciones.
+- **Mejor manejo de layout** - elimina errores de "unbounded height/width".
+- **PageViewSkeleton mejorado** con solución a problemas de dimensiones.
+- **AnimatedCrossFade personalizado** para transiciones más suaves.
+- **Documentación inline** exhaustiva en todo el código.
+- **Gestión de memoria** optimizada para aplicaciones complejas.
+
+#### Corregido
+- Errores de renderizado con widgets `Expanded` fuera de contexto Flex.
+- Problemas de dimensiones infinitas que causaban crashes.
+- Issues con `PageView` y "Horizontal viewport unbounded height".
+- Memory leaks en animaciones de larga duración.
+- Incompatibilidades con ciertos tipos de widgets complejos.
+
+#### API Nuevas
+
+##### Configuración Global
+```dart
+SkeletonConfig.configure(
+  baseColor: Colors.grey[300],
+  highlightColor: Colors.white,
+  shimmerDuration: Duration(milliseconds: 1000),
+);
+```
+
+##### Builder Pattern
+```dart
+SkeletonLoaderBuilder()
+  .child(Text('Hello World'))
+  .loading(true)
+  .lightTheme()
+  .fastAnimation()
+  .build();
+```
+
+##### Métodos de Conveniencia
+```dart
+// Configuración rápida
+SkeletonLoaderBuilder.quick(child: widget, isLoading: true);
+
+// Tema claro
+SkeletonLoaderBuilder.light(child: widget, isLoading: true);
+
+// Tema oscuro  
+SkeletonLoaderBuilder.dark(child: widget, isLoading: true);
+```
+
+##### Validación de Widgets
+```dart
+// Validar widget antes de crear skeleton
+if (!WidgetValidator.isValidForSkeleton(widget)) {
+  widget = WidgetValidator.sanitizeWidget(widget);
+}
+```
+
+#### Breaking Changes
+- Mínima versión de Dart requerida: 2.17.0
+- Algunos constructores internos han cambiado (no afecta API pública)
+- El comportamiento de caché puede cambiar el timing de algunas animaciones
+
+#### Migración
+La mayoría del código existente funcionará sin cambios. Para aprovechar las nuevas funcionalidades:
+
+1. **Configuración global** (opcional):
+```dart
+// Al inicio de la app
+SkeletonConfig.configure(baseColor: yourColor);
+```
+
+2. **Builder pattern** (opcional, mejora legibilidad):
+```dart
+// Antes
+SkeletonLoader(isLoading: true, child: widget)
+
+// Ahora (opcional)
+SkeletonLoaderBuilder().child(widget).loading(true).build()
+```
+
+3. **Manejo de errores** (automático):
+Los widgets problemáticos ahora se validan y sanitizan automáticamente.
 
 ## [1.1.1] - 2025-07-17
 

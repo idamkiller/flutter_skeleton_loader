@@ -8,13 +8,25 @@ class TextSkeleton extends BaseSkeleton {
 
   @override
   Widget build(BuildContext context) {
+    final decoration = BoxDecoration(
+      color: baseColor,
+      borderRadius: BorderRadius.circular(4),
+    );
+    if (text != null && text!.isNotEmpty) {
+      return Container(
+        decoration: decoration,
+        child: Text(
+          text ?? '',
+          style: TextStyle(
+            color: baseColor,
+          ),
+        ),
+      );
+    }
     return Container(
       width: (text?.length ?? 10) * 10.0,
       height: 20,
-      decoration: BoxDecoration(
-        color: baseColor,
-        borderRadius: BorderRadius.circular(4),
-      ),
+      decoration: decoration,
     );
   }
 }
