@@ -3,6 +3,41 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_skeleton_loader/flutter_skeleton_loader.dart';
 import 'package:flutter_skeleton_loader/src/widgets/shimmer_effect.dart';
 
+class _ErrorDuringAnalysisWidget extends StatelessWidget {
+  const _ErrorDuringAnalysisWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('Normal looking widget');
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    throw Exception('Error during skeleton analysis');
+  }
+}
+
+class _BadRuntimeTypeWidget extends StatelessWidget {
+  const _BadRuntimeTypeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('Looks normal');
+  }
+
+  @override
+  Type get runtimeType => throw Exception('runtimeType access error');
+}
+
+class _BadHashCodeWidget extends StatelessWidget {
+  const _BadHashCodeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('Normal widget');
+  }
+}
+
 void main() {
   group('SkeletonLoader - Tests básicos', () {
     testWidgets('Debería mostrar skeleton cuando isLoading es true',
@@ -484,6 +519,236 @@ void main() {
 
       expect(find.byType(SkeletonLoader), findsOneWidget);
       expect(find.byType(ShimmerEffect), findsOneWidget);
+    });
+
+    testWidgets(
+        'Debería crear skeleton por defecto cuando hay error en toString',
+        (WidgetTester tester) async {
+      const customBaseColor = Color(0xFF123456);
+      const customHighlightColor = Color(0xFF789ABC);
+      const customDuration = Duration(seconds: 2);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SkeletonLoader(
+              isLoading: true,
+              baseColor: customBaseColor,
+              highlightColor: customHighlightColor,
+              shimmerDuration: customDuration,
+              child: const _ErrorDuringAnalysisWidget(),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SkeletonLoader), findsOneWidget);
+      expect(find.byType(ShimmerEffect), findsOneWidget);
+
+      final shimmerEffect =
+          tester.widget<ShimmerEffect>(find.byType(ShimmerEffect));
+      expect(shimmerEffect.baseColor, equals(customBaseColor));
+      expect(shimmerEffect.highlightColor, equals(customHighlightColor));
+      expect(shimmerEffect.duration, equals(customDuration));
+
+      final containers = find.byType(Container);
+      expect(containers, findsAtLeastNWidgets(1));
+    });
+
+    testWidgets(
+        'Debería crear skeleton de emergencia cuando _buildSkeletonFromWidget falla',
+        (WidgetTester tester) async {
+      const emergencyBaseColor = Color(0xFFABCDEF);
+      const emergencyHighlightColor = Color(0xFF123456);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SkeletonLoader(
+              isLoading: true,
+              baseColor: emergencyBaseColor,
+              highlightColor: emergencyHighlightColor,
+              child: const _ErrorDuringAnalysisWidget(),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SkeletonLoader), findsOneWidget);
+      expect(find.byType(ShimmerEffect), findsOneWidget);
+
+      final shimmerEffect =
+          tester.widget<ShimmerEffect>(find.byType(ShimmerEffect));
+      expect(shimmerEffect.baseColor, equals(emergencyBaseColor));
+      expect(shimmerEffect.highlightColor, equals(emergencyHighlightColor));
+
+      final containerFinder = find.descendant(
+        of: find.byType(ShimmerEffect),
+        matching: find.byType(Container),
+      );
+      expect(containerFinder, findsAtLeastNWidgets(1));
+    });
+
+    testWidgets(
+        'Debería crear skeleton de emergencia correctamente con BorderRadius',
+        (WidgetTester tester) async {
+      const testColor = Color(0xFF654321);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SkeletonLoader(
+              isLoading: true,
+              baseColor: testColor,
+              child: const _BadHashCodeWidget(),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SkeletonLoader), findsOneWidget);
+      expect(find.byType(ShimmerEffect), findsOneWidget);
+
+      final shimmerEffect =
+          tester.widget<ShimmerEffect>(find.byType(ShimmerEffect));
+      expect(shimmerEffect.baseColor, anyOf(equals(testColor), isA<Color>()));
+
+      final containerFinder = find.descendant(
+        of: find.byType(ShimmerEffect),
+        matching: find.byType(Container),
+      );
+      expect(containerFinder, findsAtLeastNWidgets(1));
+    });
+
+    testWidgets(
+        'Debería activar bloque catch con widget que cause error de runtimeType',
+        (WidgetTester tester) async {
+      final complexWidget = Builder(
+        key: Key('${DateTime.now().millisecondsSinceEpoch}'),
+        builder: (context) {
+          return Container(
+            constraints: const BoxConstraints(
+              minWidth: double.infinity,
+              maxWidth: double.infinity,
+              minHeight: double.infinity,
+              maxHeight: double.infinity,
+            ),
+            child: Column(
+              children: List.generate(100, (index) {
+                return Row(
+                  children: List.generate(100, (j) {
+                    return Expanded(
+                      child: Container(
+                        height: 1,
+                        width: 1,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF000000 + index + j),
+                        ),
+                      ),
+                    );
+                  }),
+                );
+              }),
+            ),
+          );
+        },
+      );
+
+      const testBaseColor = Color(0xFF112233);
+      const testHighlightColor = Color(0xFF445566);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 100,
+              height: 100,
+              child: SkeletonLoader(
+                isLoading: true,
+                baseColor: testBaseColor,
+                highlightColor: testHighlightColor,
+                child: complexWidget,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SkeletonLoader), findsOneWidget);
+      expect(find.byType(ShimmerEffect), findsOneWidget);
+
+      final shimmerEffect =
+          tester.widget<ShimmerEffect>(find.byType(ShimmerEffect));
+      expect(
+          shimmerEffect.baseColor, anyOf(equals(testBaseColor), isA<Color>()));
+      expect(shimmerEffect.highlightColor,
+          anyOf(equals(testHighlightColor), isA<Color>()));
+    });
+
+    testWidgets('Debería usar skeleton de emergencia cuando runtimeType falla',
+        (WidgetTester tester) async {
+      const emergencyColor = Color(0xFF999999);
+      const emergencyHighlight = Color(0xFFCCCCCC);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SkeletonLoader(
+              isLoading: true,
+              baseColor: emergencyColor,
+              highlightColor: emergencyHighlight,
+              child: const _BadRuntimeTypeWidget(),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SkeletonLoader), findsOneWidget);
+      expect(find.byType(ShimmerEffect), findsOneWidget);
+
+      final shimmerEffect =
+          tester.widget<ShimmerEffect>(find.byType(ShimmerEffect));
+      expect(shimmerEffect.baseColor, equals(emergencyColor));
+      expect(shimmerEffect.highlightColor, equals(emergencyHighlight));
+
+      final containerFinder = find.descendant(
+        of: find.byType(ShimmerEffect),
+        matching: find.byType(Container),
+      );
+      expect(containerFinder, findsAtLeastNWidgets(1));
+    });
+
+    testWidgets('Debería usar colores correctos en skeleton de emergencia',
+        (WidgetTester tester) async {
+      final problematicWidget = LayoutBuilder(
+        builder: (context, constraints) {
+          throw Exception('Simulated error in layout');
+        },
+      );
+
+      const customBaseColor = Color(0xFFABCDEF);
+      const customHighlightColor = Color(0xFF123456);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SkeletonLoader(
+              isLoading: true,
+              baseColor: customBaseColor,
+              highlightColor: customHighlightColor,
+              child: problematicWidget,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SkeletonLoader), findsOneWidget);
+      expect(find.byType(ShimmerEffect), findsOneWidget);
+
+      final shimmerEffect =
+          tester.widget<ShimmerEffect>(find.byType(ShimmerEffect));
+      expect(shimmerEffect.baseColor, equals(customBaseColor));
+      expect(shimmerEffect.highlightColor, equals(customHighlightColor));
     });
 
     testWidgets(
