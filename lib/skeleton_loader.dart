@@ -179,11 +179,7 @@ class _SkeletonLoaderState extends State<SkeletonLoader> {
       }
 
       _actualWidget = widget.child;
-    } catch (e, stackTrace) {
-      /// [ROBUST ERROR HANDLING] Fallback in case of error
-      debugPrint('SkeletonLoader Error building widgets: $e');
-      debugPrint('StackTrace: $stackTrace');
-
+    } catch (e) {
       // Create default skeleton in case of error
       _skeletonWidget = RepaintBoundary(
         child: ShimmerEffect(

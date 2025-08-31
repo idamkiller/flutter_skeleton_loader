@@ -65,7 +65,6 @@ class WidgetValidator {
     } catch (e) {
       // [ERROR HANDLING] If there's any error in validation,
       // we assume the widget needs sanitization
-      debugPrint('WidgetValidator: Error validating widget: $e');
       return false;
     }
   }
@@ -165,7 +164,6 @@ class WidgetValidator {
       return widget;
     } catch (e) {
       // [EMERGENCY FALLBACK] If sanitization fails, create basic container
-      debugPrint('WidgetValidator: Error sanitizing widget: $e');
       return Container(
         width: 100,
         height: 50,

@@ -87,11 +87,7 @@ class OptimizedSkeletonRegistry {
       _skeletonCache[cacheKey] = skeleton;
 
       return skeleton;
-    } catch (e, stackTrace) {
-      // [ROBUST ERROR HANDLING] Log and fallback in case of error
-      debugPrint('OptimizedSkeletonRegistry Error: $e');
-      debugPrint('StackTrace: $stackTrace');
-
+    } catch (e, _) {
       /// Fallback to default skeleton
       return _buildDefaultSkeleton(baseColor);
     }
